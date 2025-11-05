@@ -18,7 +18,7 @@ import {
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("converter-form");
-    if (!form) return; // not on this page
+    if (!form) return; // Not on this page
 
     // Core DOM elements
     const fileInput = document.getElementById("file-input");
@@ -55,12 +55,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!modeSelect || !toFormatSelect) return;
         const mode = modeSelect.value;
 
-        const pdfOption = [...toFormatSelect.options].find((o) => o.value === "pdf");
-        const jpgOption = [...toFormatSelect.options].find((o) => o.value === "jpg");
-        const pngOption = [...toFormatSelect.options].find((o) => o.value === "png");
+        const options = Array.from(toFormatSelect.options || []);
+        const pdfOption = options.find((o) => o.value === "pdf");
+        const jpgOption = options.find((o) => o.value === "jpg");
+        const pngOption = options.find((o) => o.value === "png");
 
         if (mode === "images-to-pdf") {
-            // Only PDF makes sense as target
             if (pdfOption) pdfOption.disabled = false;
             if (jpgOption) jpgOption.disabled = true;
             if (pngOption) pngOption.disabled = true;
@@ -72,12 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 "muted"
             );
         } else if (mode === "pdf-to-images") {
-            // Only JPG/PNG are meaningful here
             if (pdfOption) pdfOption.disabled = true;
             if (jpgOption) jpgOption.disabled = false;
             if (pngOption) pngOption.disabled = false;
 
-            // Default to JPG
             if (toFormatSelect.value === "pdf") {
                 toFormatSelect.value = "jpg";
             }
@@ -91,9 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (modeSelect) {
-        modeSelect.addEventListener("change", () => {
-            updateModeUI();
-        });
+        modeSelect.addEventListener("change", updateModeUI);
         updateModeUI();
     }
 
@@ -132,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    if (changeFileBtn) {
+    if (changeFileBtn && fileInput) {
         changeFileBtn.addEventListener("click", () => {
             resetFiles();
             fileInput.click();
@@ -148,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {File[]} files
      */
     function handleFileSelection(files) {
-        // Basic validation & classification
         const images = [];
         const pdfs = [];
 
@@ -163,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (f.type === "application/pdf") {
                 pdfs.push(f);
-            } else if (f.type.startsWith("image/")) {
+            } else if (f.type && f.type.startsWith("image/")) {
                 images.push(f);
             } else {
                 showToast(`Unsupported file type: ${f.name}`, "warning");
@@ -207,13 +202,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     "info"
                 );
             }
-            selectedFiles = [pdfs[0]]; // only one PDF in this demo
+            selectedFiles = [pdfs[0]];
         }
 
         renderFileSummary(selectedFiles);
-        fileInfoWrapper.classList.remove("d-none");
-        uploadArea.classList.add("d-none");
-        downloadLink.classList.add("d-none");
+
+        if (fileInfoWrapper) fileInfoWrapper.classList.remove("d-none");
+        if (uploadArea) uploadArea.classList.add("d-none");
+        if (downloadLink) downloadLink.classList.add("d-none");
 
         setStatus(statusText, "Files selected. Ready to convert.", "muted");
     }
@@ -224,27 +220,29 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     function renderFileSummary(files) {
         if (!files || files.length === 0) {
-            fileInfoWrapper.classList.add("d-none");
+            if (fileInfoWrapper) fileInfoWrapper.classList.add("d-none");
             return;
         }
 
         const mode = modeSelect ? modeSelect.value : "images-to-pdf";
-
         const totalSize = files.reduce((acc, f) => acc + f.size, 0);
         const first = files[0];
 
-        if (mode === "images-to-pdf") {
-            fileSummaryEl.textContent =
-                files.length === 1
-                    ? `1 image selected (${first.name})`
-                    : `${files.length} images selected`;
-        } else {
-            fileSummaryEl.textContent = `1 PDF selected (${first.name})`;
+        if (fileSummaryEl) {
+            if (mode === "images-to-pdf") {
+                fileSummaryEl.textContent =
+                    files.length === 1
+                        ? `1 image selected (${first.name})`
+                        : `${files.length} images selected`;
+            } else {
+                fileSummaryEl.textContent = `1 PDF selected (${first.name})`;
+            }
         }
 
-        fileSizeEl.textContent = "Total size: " + formatBytes(totalSize);
+        if (fileSizeEl) {
+            fileSizeEl.textContent = "Total size: " + formatBytes(totalSize);
+        }
 
-        // Detailed list
         if (fileListEl) {
             const ul = document.createElement("ul");
             files.forEach((f) => {
@@ -274,17 +272,20 @@ document.addEventListener("DOMContentLoaded", () => {
             currentObjectUrl = null;
         }
         selectedFiles = [];
-        fileInput.value = "";
-        fileInfoWrapper.classList.add("d-none");
-        uploadArea.classList.remove("d-none");
 
-        fileListEl && (fileListEl.innerHTML = "");
-        fileSummaryEl && (fileSummaryEl.textContent = "");
-        fileSizeEl && (fileSizeEl.textContent = "");
+        if (fileInput) fileInput.value = "";
+        if (fileInfoWrapper) fileInfoWrapper.classList.add("d-none");
+        if (uploadArea) uploadArea.classList.remove("d-none");
 
-        downloadLink.classList.add("d-none");
-        downloadLink.removeAttribute("href");
-        downloadLink.removeAttribute("download");
+        if (fileListEl) fileListEl.innerHTML = "";
+        if (fileSummaryEl) fileSummaryEl.textContent = "";
+        if (fileSizeEl) fileSizeEl.textContent = "";
+
+        if (downloadLink) {
+            downloadLink.classList.add("d-none");
+            downloadLink.removeAttribute("href");
+            downloadLink.removeAttribute("download");
+        }
 
         setStatus(statusText, "No files selected yet.", "muted");
     }
@@ -293,72 +294,68 @@ document.addEventListener("DOMContentLoaded", () => {
        Form submit / conversion
        -------------------------------------------------------- */
 
-    if (form) {
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            if (!selectedFiles || selectedFiles.length === 0) {
-                showToast("Please select some files first.", "warning");
-                return;
-            }
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-            const mode = modeSelect ? modeSelect.value : "images-to-pdf";
-            const targetFormat = toFormatSelect ? toFormatSelect.value : "pdf";
+        if (!selectedFiles || selectedFiles.length === 0) {
+            showToast("Please select some files first.", "warning");
+            return;
+        }
 
-            setButtonLoading(convertBtn, true, "Converting...");
-            toggleProgress(progressWrapper, true);
+        const mode = modeSelect ? modeSelect.value : "images-to-pdf";
+        const targetFormat = toFormatSelect ? toFormatSelect.value : "pdf";
 
-            try {
-                if (mode === "images-to-pdf") {
-                    if (targetFormat !== "pdf") {
-                        const msg =
-                            "Images → PDF mode can only produce a PDF file. " +
-                            "Target format has been adjusted to PDF.";
-                        showToast(msg, "info");
-                        setStatus(statusText, msg, "warning");
-                    } else {
-                        setStatus(
-                            statusText,
-                            "Converting images to a single multi-page PDF...",
-                            "muted"
-                        );
-                    }
+        setButtonLoading(convertBtn, true, "Converting...");
+        toggleProgress(progressWrapper, true);
 
-                    const pdfBlob = await convertImagesToPdf(selectedFiles);
-                    applyDownloadBlob(pdfBlob, "images.pdf");
-
-                    setStatus(statusText, "PDF generated successfully!", "success");
-                    showToast("PDF generated successfully.", "success");
-                } else if (mode === "pdf-to-images") {
-                    // DEMO: not implemented yet
+        try {
+            if (mode === "images-to-pdf") {
+                if (targetFormat !== "pdf") {
                     const msg =
-                        "PDF → images is not implemented in this frontend demo. " +
-                        "You can integrate pdf.js or a backend service for this feature.";
+                        "Images → PDF mode can only produce a PDF file. " +
+                        "Target format has been adjusted to PDF.";
+                    showToast(msg, "info");
                     setStatus(statusText, msg, "warning");
-                    showToast(msg, "warning");
+                } else {
+                    setStatus(
+                        statusText,
+                        "Converting images to a single multi-page PDF...",
+                        "muted"
+                    );
                 }
 
-                const now = new Date();
-                if (lastConvLabel) {
-                    const timeStr = now.toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    });
-                    lastConvLabel.textContent = "Last conversion: " + timeStr;
-                }
-            } catch (err) {
-                console.error(err);
-                setStatus(
-                    statusText,
-                    err && err.message ? err.message : "Conversion failed.",
-                    "error"
-                );
-                showToast("Conversion failed.", "error");
-            } finally {
-                toggleProgress(progressWrapper, false);
-                setButtonLoading(convertBtn, false);
+                const pdfBlob = await convertImagesToPdf(selectedFiles);
+                applyDownloadBlob(pdfBlob, "images.pdf");
+
+                setStatus(statusText, "PDF generated successfully!", "success");
+                showToast("PDF generated successfully.", "success");
+            } else if (mode === "pdf-to-images") {
+                const msg =
+                    "PDF → images is not implemented in this frontend demo. " +
+                    "You can integrate pdf.js or a backend service for this feature.";
+                setStatus(statusText, msg, "warning");
+                showToast(msg, "warning");
             }
-        });
-    }
+
+            if (lastConvLabel) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
+                lastConvLabel.textContent = "Last conversion: " + timeStr;
+            }
+        } catch (err) {
+            console.error(err);
+            const message =
+                err && err.message ? err.message : "Conversion failed.";
+            setStatus(statusText, message, "error");
+            showToast("Conversion failed.", "error");
+        } finally {
+            toggleProgress(progressWrapper, false);
+            setButtonLoading(convertBtn, false);
+        }
+    });
 
     if (resetBtn) {
         resetBtn.addEventListener("click", () => {
@@ -383,7 +380,12 @@ document.addEventListener("DOMContentLoaded", () => {
      * @returns {Promise<Blob>}
      */
     async function convertImagesToPdf(files) {
-        if (!window.jspdf || !window.jspdf.jsPDF) {
+        const hasJsPDF =
+            typeof window !== "undefined" &&
+            window.jspdf &&
+            typeof window.jspdf.jsPDF === "function";
+
+        if (!hasJsPDF) {
             throw new Error(
                 "jsPDF is not available. Make sure you include vendor/jspdf.umd.min.js before this script."
             );
@@ -393,13 +395,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const pageSize = pageSizeSelect ? pageSizeSelect.value : "a4";
         const qualityVal = qualityRange ? parseInt(qualityRange.value, 10) : 90;
-        const quality = isNaN(qualityVal) ? 0.9 : qualityVal / 100;
+        const quality = Number.isNaN(qualityVal) ? 0.9 : qualityVal / 100;
 
         let pdf = null;
-        let isFirst = true;
 
         for (const file of files) {
-            const { canvas, width, height } = await loadImageToCanvas(file, quality);
+            const { canvas, width, height } = await loadImageToCanvas(file);
 
             if (!pdf) {
                 if (pageSize === "fit-image") {
@@ -413,7 +414,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     pdf = new jsPDF("p", "pt", format);
                 }
             } else {
-                // Add new page
                 if (pageSize === "fit-image") {
                     pdf.addPage([width, height], width > height ? "l" : "p");
                 } else {
@@ -451,12 +451,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * Load an image File into a canvas, optionally applying white background.
+     * Load an image File into a canvas, applying white background.
      * @param {File} file
-     * @param {number} quality
      * @returns {Promise<{canvas: HTMLCanvasElement, width: number, height: number}>}
      */
-    function loadImageToCanvas(file, quality) {
+    function loadImageToCanvas(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onerror = () => reject(new Error("Failed to read image file."));
@@ -474,7 +473,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             return;
                         }
 
-                        // White background to avoid black under transparent PNGs
                         ctx.fillStyle = "#ffffff";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         ctx.drawImage(img, 0, 0);
@@ -485,7 +483,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 };
                 img.onerror = () =>
-                    reject(new Error("Failed to decode image. Unsupported or corrupted file."));
+                    reject(
+                        new Error(
+                            "Failed to decode image. Unsupported or corrupted file."
+                        )
+                    );
                 img.src = reader.result;
             };
             reader.readAsDataURL(file);
@@ -497,6 +499,8 @@ document.addEventListener("DOMContentLoaded", () => {
        -------------------------------------------------------- */
 
     function applyDownloadBlob(blob, fallbackName) {
+        if (!downloadLink) return;
+
         if (currentObjectUrl) {
             URL.revokeObjectURL(currentObjectUrl);
         }

@@ -45,14 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentObjectUrl = null;
 
     /* --------------------------------------------------------
-       Feature detection: can this browser encode WebP?
+       Feature detection: WebP encoding support
        -------------------------------------------------------- */
     const canEncodeWebP = (() => {
         try {
             const canvas = document.createElement("canvas");
             if (!canvas.toDataURL) return false;
             const dataUrl = canvas.toDataURL("image/webp");
-            return dataUrl.startsWith("data:image/webp");
+            return typeof dataUrl === "string" && dataUrl.startsWith("data:image/webp");
         } catch {
             return false;
         }
@@ -63,7 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
        -------------------------------------------------------- */
 
     if (uploadArea && fileInput) {
-        uploadArea.addEventListener("click", () => fileInput.click());
+        uploadArea.addEventListener("click", () => {
+            fileInput.click();
+        });
 
         uploadArea.addEventListener("dragover", (e) => {
             e.preventDefault();
@@ -78,17 +80,20 @@ document.addEventListener("DOMContentLoaded", () => {
         uploadArea.addEventListener("drop", (e) => {
             e.preventDefault();
             uploadArea.classList.remove("dragover");
-            const file = e.dataTransfer && e.dataTransfer.files[0];
+
+            const files = e.dataTransfer && e.dataTransfer.files;
+            const file = files && files[0];
             if (file) handleFileSelect(file);
         });
 
         fileInput.addEventListener("change", (e) => {
-            const file = e.target.files && e.target.files[0];
+            const files = e.target.files;
+            const file = files && files[0];
             if (file) handleFileSelect(file);
         });
     }
 
-    if (changeFileBtn) {
+    if (changeFileBtn && fileInput) {
         changeFileBtn.addEventListener("click", () => {
             resetFileState();
             fileInput.click();
@@ -100,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
        -------------------------------------------------------- */
 
     function handleFileSelect(file) {
-        // Only allow WebP + common image formats as source
         const allowedTypes = ["image/webp", "image/png", "image/jpeg", "image/gif"];
         if (!allowedTypes.includes(file.type)) {
             showToast("Please select a WebP, PNG, JPG or GIF image.", "warning");
@@ -109,28 +113,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (file.size > MAX_SIZE) {
-            showToast("Selected file is too large for this demo (max 20 MB).", "warning");
+            showToast("Selected file is too large (max 20 MB).", "warning");
             setStatus(statusText, "File size exceeds 20 MB limit.", "error");
             return;
         }
 
         currentFile = file;
 
-        // Try to detect source format
         const mime = file.type;
         const detected = mimeToFormat(mime);
         if (detected && fromSelect && fromSelect.value === "auto") {
             fromSelect.value = detected;
         }
 
-        fileNameEl.textContent = file.name;
-        fileSizeEl.textContent = "Size: " + formatBytes(file.size);
-        fileInfoWrapper.classList.remove("d-none");
-        uploadArea.classList.add("d-none");
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (fileSizeEl) fileSizeEl.textContent = "Size: " + formatBytes(file.size);
+
+        if (fileInfoWrapper) fileInfoWrapper.classList.remove("d-none");
+        if (uploadArea) uploadArea.classList.add("d-none");
+        if (downloadLink) downloadLink.classList.add("d-none");
 
         setStatus(statusText, "File selected. Ready to convert.", "muted");
 
-        if ((mime === "image/webp" || mime === "image/gif")) {
+        if (mime === "image/webp" || mime === "image/gif") {
             setTemporaryStatus(
                 statusText,
                 "Note: animated images will be converted to a single static frame.",
@@ -147,10 +152,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         currentFile = null;
-        fileInput.value = "";
-        fileInfoWrapper.classList.add("d-none");
-        uploadArea.classList.remove("d-none");
-        downloadLink.classList.add("d-none");
+
+        if (fileInput) fileInput.value = "";
+        if (fileInfoWrapper) fileInfoWrapper.classList.add("d-none");
+        if (uploadArea) uploadArea.classList.remove("d-none");
+
+        if (downloadLink) {
+            downloadLink.classList.add("d-none");
+            downloadLink.removeAttribute("href");
+            downloadLink.removeAttribute("download");
+        }
+
         setStatus(statusText, "No file selected yet.", "muted");
     }
 
@@ -158,88 +170,88 @@ document.addEventListener("DOMContentLoaded", () => {
        Form submit: conversion
        -------------------------------------------------------- */
 
-    if (form) {
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            if (!currentFile) {
-                showToast("Please select a file first.", "warning");
-                return;
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentFile) {
+            showToast("Please select a file first.", "warning");
+            return;
+        }
+
+        const toFormat = (toSelect && toSelect.value) || "webp";
+        const fromValue = (fromSelect && fromSelect.value) || "auto";
+
+        if (toFormat === "gif") {
+            const msg =
+                "GIF output is not supported in this frontend demo. " +
+                "Please choose JPG, PNG or WebP as the target format.";
+            showToast(msg, "warning");
+            setStatus(statusText, msg, "warning");
+            return;
+        }
+
+        if (toFormat === "webp" && !canEncodeWebP) {
+            const msg =
+                "This browser does not support WebP encoding via Canvas. " +
+                "Try using JPG or PNG as the target format.";
+            showToast(msg, "error");
+            setStatus(statusText, msg, "error");
+            return;
+        }
+
+        const rawQuality = qualityRange ? parseInt(qualityRange.value, 10) : 85;
+        let quality = Number.isNaN(rawQuality) ? 0.85 : rawQuality / 100;
+
+        if (compressSwitch && !compressSwitch.checked) {
+            quality = Math.max(quality, 0.9);
+        }
+
+        setButtonLoading(convertBtn, true, "Converting...");
+        toggleProgress(progressWrapper, true);
+        setStatus(statusText, "Converting image...", "muted");
+
+        try {
+            const blob = await convertImage(currentFile, fromValue, toFormat, quality);
+            if (!blob) {
+                throw new Error("Conversion failed.");
             }
 
-            const toFormat = (toSelect && toSelect.value) || "webp";
-            const fromValue = (fromSelect && fromSelect.value) || "auto";
-
-            // GIF output is not implemented in this pure-frontend demo
-            if (toFormat === "gif") {
-                const msg =
-                    "GIF output is not supported in this frontend demo. " +
-                    "Please choose JPG, PNG or WebP as the target format.";
-                showToast(msg, "warning");
-                setStatus(statusText, msg, "warning");
-                return;
+            if (currentObjectUrl) {
+                URL.revokeObjectURL(currentObjectUrl);
             }
+            currentObjectUrl = URL.createObjectURL(blob);
 
-            // WebP encoding support check
-            if (toFormat === "webp" && !canEncodeWebP) {
-                const msg =
-                    "This browser does not support WebP encoding via Canvas. " +
-                    "Try using JPG or PNG as the target format.";
-                showToast(msg, "error");
-                setStatus(statusText, msg, "error");
-                return;
-            }
+            const ext = toFormat;
+            const filename = generateDownloadName(currentFile.name, ext);
 
-            const rawQuality = qualityRange ? parseInt(qualityRange.value, 10) : 85;
-            let quality = isNaN(rawQuality) ? 0.85 : rawQuality / 100;
-            if (compressSwitch && !compressSwitch.checked) {
-                // Less compression → higher quality
-                quality = Math.max(quality, 0.9);
-            }
-
-            setButtonLoading(convertBtn, true, "Converting...");
-            toggleProgress(progressWrapper, true);
-            setStatus(statusText, "Converting image...", "muted");
-
-            try {
-                const blob = await convertImage(currentFile, fromValue, toFormat, quality);
-                if (!blob) throw new Error("Conversion failed.");
-
-                if (currentObjectUrl) {
-                    URL.revokeObjectURL(currentObjectUrl);
-                }
-                currentObjectUrl = URL.createObjectURL(blob);
-
-                const ext = toFormat;
-                const filename = generateDownloadName(currentFile.name, ext);
+            if (downloadLink) {
                 downloadLink.href = currentObjectUrl;
                 downloadLink.download = filename;
                 downloadLink.classList.remove("d-none");
-
-                const now = new Date();
-                if (lastConvLabel) {
-                    const timeStr = now.toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    });
-                    lastConvLabel.textContent = "Last conversion: " + timeStr;
-                }
-
-                setStatus(statusText, "Conversion successful!", "success");
-                showToast("Image converted successfully.", "success");
-            } catch (err) {
-                console.error(err);
-                setStatus(
-                    statusText,
-                    err && err.message ? err.message : "Error during conversion.",
-                    "error"
-                );
-                showToast("Conversion failed.", "error");
-            } finally {
-                toggleProgress(progressWrapper, false);
-                setButtonLoading(convertBtn, false);
             }
-        });
-    }
+
+            if (lastConvLabel) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
+                lastConvLabel.textContent = "Last conversion: " + timeStr;
+            }
+
+            setStatus(statusText, "Conversion successful!", "success");
+            showToast("Image converted successfully.", "success");
+        } catch (err) {
+            console.error(err);
+            const message =
+                err && err.message ? err.message : "Error during conversion.";
+            setStatus(statusText, message, "error");
+            showToast("Conversion failed.", "error");
+        } finally {
+            toggleProgress(progressWrapper, false);
+            setButtonLoading(convertBtn, false);
+        }
+    });
 
     /* --------------------------------------------------------
        Reset button
@@ -262,10 +274,10 @@ document.addEventListener("DOMContentLoaded", () => {
        -------------------------------------------------------- */
 
     /**
-     * Convert current image to desired format using Canvas.
+     * Convert image to desired format using Canvas.
      * @param {File} file
      * @param {string} fromFormat - "auto" | "webp" | "jpg" | "png" | "gif"
-     * @param {string} toFormat   - "webp" | "jpg" | "png" | "gif"
+     * @param {string} toFormat   - "webp" | "jpg" | "png"
      * @param {number} quality    - 0..1
      * @returns {Promise<Blob>}
      */
@@ -281,30 +293,19 @@ document.addEventListener("DOMContentLoaded", () => {
                         const canvas = document.createElement("canvas");
                         canvas.width = img.width;
                         canvas.height = img.height;
-                        const ctx = canvas.getContext("2d");
 
+                        const ctx = canvas.getContext("2d");
                         if (!ctx) {
                             reject(new Error("Canvas is not supported in this browser."));
                             return;
                         }
 
-                        // If we output JPG, fill with white (to avoid black where transparency was)
                         if (toFormat === "jpg" || toFormat === "jpeg") {
                             ctx.fillStyle = "#ffffff";
                             ctx.fillRect(0, 0, canvas.width, canvas.height);
                         }
 
                         ctx.drawImage(img, 0, 0);
-
-                        // GIF output not supported with plain Canvas
-                        if (toFormat === "gif") {
-                            reject(
-                                new Error(
-                                    "GIF output is not available in this frontend-only demo."
-                                )
-                            );
-                            return;
-                        }
 
                         let mimeType = "image/jpeg";
                         if (toFormat === "png") mimeType = "image/png";
@@ -325,7 +326,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         reject(err);
                     }
                 };
-                img.onerror = () => reject(new Error("Failed to decode image."));
+                img.onerror = () =>
+                    reject(
+                        new Error(
+                            "Failed to decode image. Unsupported or corrupted file."
+                        )
+                    );
                 img.src = reader.result;
             };
 
@@ -338,6 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
        -------------------------------------------------------- */
 
     function mimeToFormat(mime) {
+        if (!mime) return null;
         if (mime === "image/webp") return "webp";
         if (mime === "image/jpeg") return "jpg";
         if (mime === "image/png") return "png";

@@ -1,32 +1,54 @@
-// Cookie consent logic
+/* ============================================================
+   cookie-consent.js
+   Simple cookie consent banner logic with localStorage
+   ============================================================ */
+
 document.addEventListener("DOMContentLoaded", () => {
-  const banner = document.getElementById("cookie-banner");
-  if (!banner) return;
+    const banner = document.getElementById("cookie-banner");
+    if (!banner) return;
 
-  const acceptBtn = document.getElementById("accept-cookies");
-  const declineBtn = document.getElementById("decline-cookies");
+    const acceptBtn = document.getElementById("accept-cookies");
+    const declineBtn = document.getElementById("decline-cookies");
 
-  const consent = localStorage.getItem("cookieConsent");
+    // Safe localStorage access
+    let consent = null;
+    try {
+        consent = localStorage.getItem("cookieConsent");
+    } catch {
+        consent = null;
+    }
 
-  // Show banner only if no prior choice
-  if (!consent) {
-    banner.style.display = "block";
-  }
+    // Show banner only if no prior choice
+    if (!consent) {
+        banner.style.display = "block";
+    }
 
-  function hideBanner() {
-    banner.style.display = "none";
-  }
+    const hideBanner = () => {
+        banner.style.display = "none";
+    };
 
-  acceptBtn.addEventListener("click", () => {
-    localStorage.setItem("cookieConsent", "accepted");
-    hideBanner();
-    // TODO: enable Google Analytics / AdSense here
-    // initAnalytics();
-  });
+    if (acceptBtn) {
+        acceptBtn.addEventListener("click", () => {
+            try {
+                localStorage.setItem("cookieConsent", "accepted");
+            } catch {
+                // ignore storage errors (private mode)
+            }
+            hideBanner();
+            // Hook for analytics initialization if needed
+            // initAnalytics();
+        });
+    }
 
-  declineBtn.addEventListener("click", () => {
-    localStorage.setItem("cookieConsent", "declined");
-    hideBanner();
-    // Make sure you do NOT load GA / AdSense if declined
-  });
+    if (declineBtn) {
+        declineBtn.addEventListener("click", () => {
+            try {
+                localStorage.setItem("cookieConsent", "declined");
+            } catch {
+                // ignore storage errors
+            }
+            hideBanner();
+            // Ensure no analytics are loaded here
+        });
+    }
 });

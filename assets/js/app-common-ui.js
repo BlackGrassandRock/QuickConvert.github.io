@@ -18,7 +18,6 @@ export function setStatus(el, message, variant = "muted") {
 
     el.textContent = message || "";
 
-    // Remove old variants
     el.classList.remove("text-success", "text-danger", "text-warning", "text-secondary");
 
     switch (variant) {
@@ -51,14 +50,17 @@ export function setTemporaryStatus(el, message, variant = "muted", durationMs = 
         return;
     }
 
-    const prevText = el.textContent;
-    const prevClass = el.className;
+    const prevText = el.textContent || "";
+
+    let prevVariant = "muted";
+    if (el.classList.contains("text-success")) prevVariant = "success";
+    else if (el.classList.contains("text-danger")) prevVariant = "error";
+    else if (el.classList.contains("text-warning")) prevVariant = "warning";
 
     setStatus(el, message, variant);
 
     window.setTimeout(() => {
-        el.textContent = prevText;
-        el.className = prevClass;
+        setStatus(el, prevText, prevVariant);
     }, durationMs);
 }
 
@@ -113,11 +115,16 @@ let toastContainer = null;
 
 /**
  * Create (once) and return the toast container element.
- * @returns {HTMLElement}
+ * Returns null if document.body is not ready yet.
+ * @returns {HTMLElement|null}
  */
 function getToastContainer() {
-    if (toastContainer && document.body.contains(toastContainer)) {
+    if (toastContainer && document.body && document.body.contains(toastContainer)) {
         return toastContainer;
+    }
+
+    if (!document.body) {
+        return null;
     }
 
     toastContainer = document.createElement("div");
@@ -144,9 +151,10 @@ export function showToast(message, type = "info", durationMs = 3000) {
     if (!message) return;
 
     const container = getToastContainer();
+    if (!container) return;
+
     const toast = document.createElement("div");
 
-    // Basic look (we rely on theme colors but set some inline styles for layout)
     toast.className = "qc-toast shadow-sm";
     toast.style.minWidth = "220px";
     toast.style.maxWidth = "320px";
@@ -161,7 +169,6 @@ export function showToast(message, type = "info", durationMs = 3000) {
     toast.style.transform = "translateY(-6px)";
     toast.style.transition = "opacity 0.15s ease, transform 0.15s ease";
 
-    // Background / text colors by type – using CSS variables when possible
     const bgColors = {
         info: "rgba(37, 99, 235, 0.95)",
         success: "rgba(22, 163, 74, 0.95)",
@@ -194,7 +201,6 @@ export function showToast(message, type = "info", durationMs = 3000) {
     toast.appendChild(closeBtn);
     container.appendChild(toast);
 
-    // Trigger animation
     requestAnimationFrame(() => {
         toast.style.opacity = "1";
         toast.style.transform = "translateY(0)";
@@ -222,9 +228,11 @@ function hideToast(toast) {
    Global namespace (optional)
    Allows usage as window.QCUI.* from non-module scripts
    ============================================================ */
-window.QCUI = window.QCUI || {};
-window.QCUI.setStatus = setStatus;
-window.QCUI.setTemporaryStatus = setTemporaryStatus;
-window.QCUI.toggleProgress = toggleProgress;
-window.QCUI.setButtonLoading = setButtonLoading;
-window.QCUI.showToast = showToast;
+if (typeof window !== "undefined") {
+    window.QCUI = window.QCUI || {};
+    window.QCUI.setStatus = setStatus;
+    window.QCUI.setTemporaryStatus = setTemporaryStatus;
+    window.QCUI.toggleProgress = toggleProgress;
+    window.QCUI.setButtonLoading = setButtonLoading;
+    window.QCUI.showToast = showToast;
+}

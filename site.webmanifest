@@ -27,7 +27,7 @@
       "type": "image/png"
     },
     {
-      "src": "assets/img/logo.svg",
+      "src": "assets/img/icons/logo.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"

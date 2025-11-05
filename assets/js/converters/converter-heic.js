@@ -45,15 +45,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentFile = null;
     let currentObjectUrl = null;
 
-    // Check for heic2any library (should be loaded via <script> on the page if you use it)
-    const hasHeic2Any = typeof window.heic2any === "function";
+    // Safely detect heic2any presence
+    const hasHeic2Any =
+        typeof window !== "undefined" &&
+        typeof window.heic2any === "function";
 
     /* --------------------------------------------------------
        Drag & Drop + file input
        -------------------------------------------------------- */
 
     if (uploadArea && fileInput) {
-        uploadArea.addEventListener("click", () => fileInput.click());
+        uploadArea.addEventListener("click", () => {
+            fileInput.click();
+        });
 
         uploadArea.addEventListener("dragover", (e) => {
             e.preventDefault();
@@ -68,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         uploadArea.addEventListener("drop", (e) => {
             e.preventDefault();
             uploadArea.classList.remove("dragover");
-            const file = e.dataTransfer && e.dataTransfer.files[0];
+            const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
             if (file) handleFileSelect(file);
         });
 
@@ -78,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    if (changeFileBtn) {
+    if (changeFileBtn && fileInput) {
         changeFileBtn.addEventListener("click", () => {
             resetFileState();
             fileInput.click();
@@ -98,23 +102,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (file.size > MAX_SIZE) {
-            showToast("Selected file is too large for this demo (max 20 MB).", "warning");
+            showToast("Selected file is too large (max 20 MB).", "warning");
             setStatus(statusText, "File size exceeds 20 MB limit.", "error");
             return;
         }
 
         currentFile = file;
 
-        // Detect source format for dropdown
         const detected = mimeToFormat(file.type);
         if (detected && fromSelect && fromSelect.value === "auto") {
             fromSelect.value = detected;
         }
 
-        fileNameEl.textContent = file.name;
-        fileSizeEl.textContent = "Size: " + formatBytes(file.size);
-        fileInfoWrapper.classList.remove("d-none");
-        uploadArea.classList.add("d-none");
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (fileSizeEl) fileSizeEl.textContent = "Size: " + formatBytes(file.size);
+        if (fileInfoWrapper) fileInfoWrapper.classList.remove("d-none");
+        if (uploadArea) uploadArea.classList.add("d-none");
 
         setStatus(statusText, "File selected. Ready to convert.", "muted");
 
@@ -135,10 +138,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         currentFile = null;
-        fileInput.value = "";
-        fileInfoWrapper.classList.add("d-none");
-        uploadArea.classList.remove("d-none");
-        downloadLink.classList.add("d-none");
+
+        if (fileInput) fileInput.value = "";
+        if (fileInfoWrapper) fileInfoWrapper.classList.add("d-none");
+        if (uploadArea) uploadArea.classList.remove("d-none");
+        if (downloadLink) downloadLink.classList.add("d-none");
+
         setStatus(statusText, "No file selected yet.", "muted");
     }
 
@@ -146,78 +151,78 @@ document.addEventListener("DOMContentLoaded", () => {
        Form submit: conversion
        -------------------------------------------------------- */
 
-    if (form) {
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            if (!currentFile) {
-                showToast("Please select a file first.", "warning");
-                return;
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentFile) {
+            showToast("Please select a file first.", "warning");
+            return;
+        }
+
+        const fromValue = (fromSelect && fromSelect.value) || "auto";
+        const toValue = (toSelect && toSelect.value) || "jpg";
+
+        // Frontend demo only supports HEIC → JPG/PNG and JPG ↔ PNG
+        if ((fromValue === "jpg" || fromValue === "png") && toValue === "heic") {
+            const msg =
+                "JPG/PNG → HEIC is not supported in this frontend demo. " +
+                "You can implement it later on a backend service.";
+            showToast(msg, "warning");
+            setStatus(statusText, msg, "warning");
+            return;
+        }
+
+        const rawQuality = qualityRange ? parseInt(qualityRange.value, 10) : 90;
+        let quality = Number.isNaN(rawQuality) ? 0.9 : rawQuality / 100;
+        if (compressSwitch && !compressSwitch.checked) {
+            quality = Math.max(quality, 0.95);
+        }
+
+        setButtonLoading(convertBtn, true, "Converting...");
+        toggleProgress(progressWrapper, true);
+        setStatus(statusText, "Converting file...", "muted");
+
+        try {
+            const blob = await convertHeicOrImage(currentFile, fromValue, toValue, quality);
+            if (!blob) {
+                throw new Error("Conversion failed.");
             }
 
-            const fromValue = (fromSelect && fromSelect.value) || "auto";
-            const toValue = (toSelect && toSelect.value) || "jpg";
-
-            // Frontend demo only supports HEIC → JPG/PNG and JPG ↔ PNG
-            if ((fromValue === "jpg" || fromValue === "png") && toValue === "heic") {
-                const msg =
-                    "JPG/PNG → HEIC is not supported in this frontend demo. " +
-                    "You can implement it later on a backend service.";
-                showToast(msg, "warning");
-                setStatus(statusText, msg, "warning");
-                return;
+            if (currentObjectUrl) {
+                URL.revokeObjectURL(currentObjectUrl);
             }
+            currentObjectUrl = URL.createObjectURL(blob);
 
-            const rawQuality = qualityRange ? parseInt(qualityRange.value, 10) : 90;
-            let quality = isNaN(rawQuality) ? 0.9 : rawQuality / 100;
-            if (compressSwitch && !compressSwitch.checked) {
-                quality = Math.max(quality, 0.95);
-            }
+            const ext = toValue === "png" ? "png" : "jpg";
+            const filename = generateDownloadName(currentFile.name, ext);
 
-            setButtonLoading(convertBtn, true, "Converting...");
-            toggleProgress(progressWrapper, true);
-            setStatus(statusText, "Converting file...", "muted");
-
-            try {
-                const blob = await convertHeicOrImage(currentFile, fromValue, toValue, quality);
-                if (!blob) throw new Error("Conversion failed.");
-
-                if (currentObjectUrl) {
-                    URL.revokeObjectURL(currentObjectUrl);
-                }
-                currentObjectUrl = URL.createObjectURL(blob);
-
-                const ext = toValue === "png" ? "png" : "jpg";
-                const filename = generateDownloadName(currentFile.name, ext);
-
+            if (downloadLink) {
                 downloadLink.href = currentObjectUrl;
                 downloadLink.download = filename;
                 downloadLink.classList.remove("d-none");
-
-                const now = new Date();
-                if (lastConvLabel) {
-                    const timeStr = now.toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    });
-                    lastConvLabel.textContent = "Last conversion: " + timeStr;
-                }
-
-                setStatus(statusText, "Conversion successful!", "success");
-                showToast("File converted successfully.", "success");
-            } catch (err) {
-                console.error(err);
-                setStatus(
-                    statusText,
-                    err && err.message ? err.message : "Error during conversion.",
-                    "error"
-                );
-                showToast("Conversion failed.", "error");
-            } finally {
-                toggleProgress(progressWrapper, false);
-                setButtonLoading(convertBtn, false);
             }
-        });
-    }
+
+            if (lastConvLabel) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
+                lastConvLabel.textContent = "Last conversion: " + timeStr;
+            }
+
+            setStatus(statusText, "Conversion successful!", "success");
+            showToast("File converted successfully.", "success");
+        } catch (err) {
+            console.error(err);
+            const message =
+                err && err.message ? err.message : "Error during conversion.";
+            setStatus(statusText, message, "error");
+            showToast("Conversion failed.", "error");
+        } finally {
+            toggleProgress(progressWrapper, false);
+            setButtonLoading(convertBtn, false);
+        }
+    });
 
     /* --------------------------------------------------------
        Reset button
@@ -253,6 +258,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const detected = mimeToFormat(mime);
         const effectiveFrom = fromFormat === "auto" ? detected : fromFormat;
 
+        if (!effectiveFrom) {
+            return Promise.reject(
+                new Error("Unsupported or unknown source format.")
+            );
+        }
+
         if (effectiveFrom === "heic") {
             if (!hasHeic2Any || !window.heic2any) {
                 return Promise.reject(
@@ -262,13 +273,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
 
-            // Convert HEIC/HEIF via heic2any library
             const targetMime = toFormat === "png" ? "image/png" : "image/jpeg";
 
             return window.heic2any({
                 blob: file,
                 toType: targetMime,
-                quality // some versions of heic2any support quality
+                quality
             }).then((result) => {
                 // heic2any may return a single Blob or an array of Blobs
                 if (Array.isArray(result)) {
@@ -285,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * Convert a regular image (JPG/PNG) via Canvas.
      * @param {File} file
-     * @param {string} toFormat - "jpg" | "png"
+     * @param {"jpg"|"png"} toFormat
      * @param {number} quality  - 0..1
      * @returns {Promise<Blob>}
      */
@@ -308,7 +318,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             return;
                         }
 
-                        // If we output JPG, fill with white (avoid black under transparency)
+                        // For JPG output, fill background with white to avoid
+                        // displaying black where the original had transparency.
                         if (toFormat === "jpg" || toFormat === "jpeg") {
                             ctx.fillStyle = "#ffffff";
                             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -316,12 +327,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         ctx.drawImage(img, 0, 0);
 
-                        let mimeType = toFormat === "png" ? "image/png" : "image/jpeg";
+                        const mimeType =
+                            toFormat === "png" ? "image/png" : "image/jpeg";
 
                         canvas.toBlob(
                             (blob) => {
                                 if (!blob) {
-                                    reject(new Error("Failed to generate output image."));
+                                    reject(
+                                        new Error("Failed to generate output image.")
+                                    );
                                     return;
                                 }
                                 resolve(blob);
@@ -346,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
        -------------------------------------------------------- */
 
     function mimeToFormat(mime) {
+        if (!mime) return null;
         if (mime === "image/heic" || mime === "image/heif") return "heic";
         if (mime === "image/jpeg") return "jpg";
         if (mime === "image/png") return "png";

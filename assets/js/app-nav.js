@@ -6,14 +6,16 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     const nav = document.querySelector(".navbar");
-    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+    const navLinksNodeList = document.querySelectorAll(".navbar-nav .nav-link");
+    const navLinks = Array.from(navLinksNodeList || []);
     const collapseEl = document.getElementById("mainNavbar");
 
-
-    // Лёгкий эффект для навбара при скролле
+    /* --------------------------------------------------------
+       Navbar scrolled state
+       -------------------------------------------------------- */
     if (nav) {
         const toggleScrolled = () => {
-            const threshold = 8; // пикселей
+            const threshold = 8;
             if (window.scrollY > threshold) {
                 nav.classList.add("navbar-scrolled");
             } else {
@@ -21,53 +23,58 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-        toggleScrolled(); // вызвать один раз на загрузке
+        toggleScrolled();
         window.addEventListener("scroll", toggleScrolled);
     }
 
+    /* --------------------------------------------------------
+       Collapse helpers (mobile)
+       -------------------------------------------------------- */
 
-    // Helper: collapse navbar on mobile (after click)
     function collapseNavbarIfNeeded() {
         if (!collapseEl) return;
         if (!collapseEl.classList.contains("show")) return;
 
-        // Use Bootstrap's Collapse if available
         if (typeof bootstrap !== "undefined" && bootstrap.Collapse) {
             const instance =
                 bootstrap.Collapse.getInstance(collapseEl) ||
                 new bootstrap.Collapse(collapseEl, { toggle: false });
             instance.hide();
         } else {
-            // Fallback: just remove "show" class
             collapseEl.classList.remove("show");
         }
     }
 
-    // Helper: set active link by href (used as fallback if no .active in markup)
+    /* --------------------------------------------------------
+       Active link helpers
+       -------------------------------------------------------- */
+
     function setActiveByPath() {
+        if (!navLinks.length) return;
+
         const currentPath = window.location.pathname.split("/").pop() || "index.html";
-        const currentHash = window.location.hash;
+        const currentHash = window.location.hash || "";
 
         let hasActive = false;
-        navLinks.forEach((link) => {
+        for (const link of navLinks) {
             if (link.classList.contains("active")) {
                 hasActive = true;
+                break;
             }
-        });
+        }
 
-        // If HTML уже сам расставил .active — не трогаем
+        // If HTML already defines .active, do not override
         if (hasActive) return;
 
         navLinks.forEach((link) => {
             const href = link.getAttribute("href") || "";
             link.classList.remove("active");
 
-            // Exact page match (e.g. "webp-converter.html")
             if (href === currentPath || href === currentPath + currentHash) {
                 link.classList.add("active");
+                return;
             }
 
-            // Index + hash case (e.g. "index.html#png-jpg")
             if (
                 currentPath === "index.html" &&
                 currentHash &&
@@ -78,8 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Helper: smooth scroll to section with offset for fixed navbar
+    /* --------------------------------------------------------
+       Smooth scrolling helper
+       -------------------------------------------------------- */
+
     function scrollToSection(sectionId) {
+        if (!sectionId) return;
         const target = document.getElementById(sectionId);
         if (!target) return;
 
@@ -93,11 +104,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Attach click handlers to nav links
+    /* --------------------------------------------------------
+       Attach click handlers to nav links
+       -------------------------------------------------------- */
+
     navLinks.forEach((link) => {
         const href = link.getAttribute("href") || "";
 
-        // In-page anchor (#section) on the same page
+        // Same-page anchor (#section)
         if (href.startsWith("#")) {
             link.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -105,8 +119,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 scrollToSection(id);
                 collapseNavbarIfNeeded();
             });
-        } else if (href.includes("#")) {
-            // Links like "index.html#png-jpg" – only intercept if we stay on same page
+            return;
+        }
+
+        // Links like "index.html#section"
+        if (href.includes("#")) {
             link.addEventListener("click", (e) => {
                 const [path, hash] = href.split("#");
                 const currentPath = window.location.pathname.split("/").pop() || "index.html";
@@ -118,25 +135,33 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     collapseNavbarIfNeeded();
                 }
-                // иначе даём обычную навигацию на другую страницу
+                // Otherwise allow normal navigation to another page
             });
-        } else {
-            // Plain link to another page – просто схлопываем меню на мобиле
-            link.addEventListener("click", () => {
-                collapseNavbarIfNeeded();
-            });
+            return;
         }
+
+        // Plain link to another page
+        link.addEventListener("click", () => {
+            collapseNavbarIfNeeded();
+        });
     });
 
-    // Basic "active link" fallback, если на странице нет явного .active в HTML
+    // Initial active-link fallback
     setActiveByPath();
 
-    // Optional: simple scrollspy for pages with in-page sections
-    const sections = document.querySelectorAll("section[id]");
-    if (sections.length > 0) {
+    /* --------------------------------------------------------
+       Simple scrollspy for pages with in-page sections
+       -------------------------------------------------------- */
+
+    const sectionsNodeList = document.querySelectorAll("section[id]");
+    const sections = Array.from(sectionsNodeList || []);
+
+    if (sections.length && navLinks.length) {
         window.addEventListener("scroll", () => {
             const scrollPos = window.scrollY;
             const navHeight = nav ? nav.offsetHeight : 0;
+            const currentPath = window.location.pathname.split("/").pop() || "index.html";
+
             let currentId = null;
 
             sections.forEach((section) => {
@@ -148,21 +173,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            if (currentId) {
-                navLinks.forEach((link) => {
-                    const href = link.getAttribute("href") || "";
-                    const isSamePageAnchor =
-                        href === "#" + currentId ||
-                        href === window.location.pathname.split("/").pop() + "#" + currentId;
+            if (!currentId) return;
 
-                    if (isSamePageAnchor) {
-                        link.classList.add("active");
-                    } else if (href.startsWith("#")) {
-                        // Сбрасываем active только для якорных ссылок текущей страницы
-                        link.classList.remove("active");
-                    }
-                });
-            }
+            navLinks.forEach((link) => {
+                const href = link.getAttribute("href") || "";
+                const samePageAnchor =
+                    href === "#" + currentId ||
+                    href === currentPath + "#" + currentId ||
+                    href === "index.html#" + currentId;
+
+                if (samePageAnchor) {
+                    link.classList.add("active");
+                } else if (href.startsWith("#") || href.endsWith("#" + currentId)) {
+                    // Only clear active for in-page links
+                    link.classList.remove("active");
+                }
+            });
         });
     }
 });
