@@ -1,6 +1,6 @@
 /* ============================================================
    converter-webp.js
-   WebP ↔ JPG / PNG / GIF (frontend demo)
+   WebP ↔ JPG / PNG (frontend demo)
    - Uses <canvas> for image → image conversion
    - GIF output is NOT implemented (needs extra encoder/back-end)
    - Animated WebP/GIF are flattened to a single frame
@@ -32,10 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const toSelect = document.getElementById("to-format");
     const qualityRange = document.getElementById("quality-range");
     const compressSwitch = document.getElementById("compress-switch");
+    const swapBtn = document.getElementById("swap-formats");
 
     const statusText = document.getElementById("status-text");
     const progressWrapper = document.getElementById("progress-bar-wrapper");
     const downloadLink = document.getElementById("download-link");
+    const downloadHint = document.getElementById("download-hint");
     const convertBtn = document.getElementById("convert-btn");
     const resetBtn = document.getElementById("reset-btn");
     const lastConvLabel = document.getElementById("last-conv-label");
@@ -101,6 +103,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* --------------------------------------------------------
+       Swap button (WebP ↔ JPG/PNG)
+       -------------------------------------------------------- */
+
+    if (swapBtn && fromSelect && toSelect) {
+        swapBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const prevFrom = fromSelect.value; // "auto" | "webp" | "jpg" | "png"
+            const prevTo = toSelect.value;     // "webp" | "jpg" | "png"
+
+            // Basic swap
+            let newFrom = prevTo;
+            let newTo = prevFrom;
+
+            // Do not allow "auto" as target format
+            if (newTo === "auto") {
+                let detected = null;
+
+                if (currentFile && currentFile.type) {
+                    detected = mimeToFormat(currentFile.type);
+                }
+
+                if (detected === "webp" || detected === "jpg" || detected === "png") {
+                    newTo = detected;
+                } else {
+                    // Fallback: choose something different from newFrom
+                    if (newFrom === "webp") {
+                        newTo = "jpg";
+                    } else if (newFrom === "jpg") {
+                        newTo = "webp";
+                    } else {
+                        newTo = "webp";
+                    }
+                }
+            }
+
+            fromSelect.value = newFrom;
+            toSelect.value = newTo;
+
+            setTemporaryStatus(statusText, "Formats swapped.", "muted", 1500);
+        });
+    }
+
+    /* --------------------------------------------------------
        File handling
        -------------------------------------------------------- */
 
@@ -131,7 +177,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (fileInfoWrapper) fileInfoWrapper.classList.remove("d-none");
         if (uploadArea) uploadArea.classList.add("d-none");
-        if (downloadLink) downloadLink.classList.add("d-none");
+
+        if (downloadLink) {
+            downloadLink.classList.add("d-none");
+            downloadLink.removeAttribute("href");
+            downloadLink.removeAttribute("download");
+        }
+        if (downloadHint) {
+            downloadHint.classList.add("d-none");
+        }
 
         setStatus(statusText, "File selected. Ready to convert.", "muted");
 
@@ -162,6 +216,9 @@ document.addEventListener("DOMContentLoaded", () => {
             downloadLink.removeAttribute("href");
             downloadLink.removeAttribute("download");
         }
+        if (downloadHint) {
+            downloadHint.classList.add("d-none");
+        }
 
         setStatus(statusText, "No file selected yet.", "muted");
     }
@@ -180,15 +237,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const toFormat = (toSelect && toSelect.value) || "webp";
         const fromValue = (fromSelect && fromSelect.value) || "auto";
-
-        if (toFormat === "gif") {
-            const msg =
-                "GIF output is not supported in this frontend demo. " +
-                "Please choose JPG, PNG or WebP as the target format.";
-            showToast(msg, "warning");
-            setStatus(statusText, msg, "warning");
-            return;
-        }
 
         if (toFormat === "webp" && !canEncodeWebP) {
             const msg =
@@ -228,6 +276,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 downloadLink.href = currentObjectUrl;
                 downloadLink.download = filename;
                 downloadLink.classList.remove("d-none");
+            }
+            if (downloadHint) {
+                downloadHint.classList.remove("d-none");
+            }
+
+            // Trigger automatic download
+            try {
+                if (downloadLink) {
+                    downloadLink.click();
+                }
+            } catch {
+                // ignore, user still has the button
             }
 
             if (lastConvLabel) {
