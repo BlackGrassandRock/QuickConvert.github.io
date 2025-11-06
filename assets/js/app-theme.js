@@ -9,15 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const icon = document.getElementById("theme-toggle-icon");
     const text = document.getElementById("theme-toggle-text");
 
-    // --- Load initial theme from localStorage or system preference ---
+    // --- Load initial theme from localStorage ---
     const savedTheme = localStorage.getItem("qc-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    // Default is dark; use light only if user explicitly selected it or system prefers it
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-        setTheme("dark", false);
-    } else {
+    // Default is dark if no saved theme
+    if (savedTheme === "light") {
         setTheme("light", false);
+    } else {
+        setTheme("dark", false);
     }
 
     // --- Event listener for toggle button ---
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Apply theme ---
+    // --- Function to apply theme ---
     function setTheme(theme, persist = true) {
         if (theme === "light") {
             body.classList.add("theme-light");
@@ -44,13 +43,4 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("qc-theme", theme);
         }
     }
-
-    // --- React to OS theme change (optional) ---
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-        const currentPref = e.matches ? "dark" : "light";
-        const saved = localStorage.getItem("qc-theme");
-        if (!saved) {
-            setTheme(currentPref, false);
-        }
-    });
 });
