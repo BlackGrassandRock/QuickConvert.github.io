@@ -1,485 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <title>QuickConvert – Image ↔ PDF Converter</title>
+  <meta charset="UTF-8" />
+  <title>QuickConvert – JPG/PNG ↔ PDF Converter</title>
 
-    <!-- Basic SEO -->
-    <meta
-        name="description"
-        content="Convert images to PDF and PDF pages to images online. QuickConvert is a free browser-based Image ↔ PDF converter."
-    />
-    <meta
-        name="keywords"
-        content="image to pdf, jpg to pdf, png to pdf, pdf to image, pdf to jpg, online pdf converter"
-    />
-    <meta name="robots" content="index, follow" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="QuickConvert" />
-    <meta name="theme-color" content="#0f172a" />
+  <!-- Basic SEO -->
+  <meta name="description" content="Convert JPG/PNG to PDF and PDF pages to JPG/PNG online. QuickConvert is a free browser-based JPG/PNG ↔ PDF converter." />
+  <meta name="keywords" content="JPG/PNG to pdf, jpg to pdf, png to pdf, pdf to JPG/PNG, pdf to jpg, online pdf converter" />
+  <meta name="robots" content="index, follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="QuickConvert" />
+  <meta name="theme-color" content="#0f172a" />
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://quickconvert.example.com/image-pdf.html" />
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://quickconvert.example.com/JPG/PNG-pdf.html" />
 
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/icons/icons/favicon-32x32.ico" />
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/icons/icons/favicon-16x16.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icons/icons/apple-touch-icon.png" />
-    <link rel="manifest" href="site.webmanifest" />
+  <!-- Icons (paths aligned with project structure) -->
+  <link rel="icon" type="JPG/PNG/png" sizes="32x32" href="assets/img/icons/favicon-32x32.ico" />
+  <link rel="icon" type="JPG/PNG/png" sizes="16x16" href="assets/img/icons/favicon-16x16.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icons/apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="QuickConvert – Image ↔ PDF Converter" />
-    <meta
-        property="og:description"
-        content="Free online Image ↔ PDF converter. Turn images into PDF and export PDF pages as images directly in your browser."
-    />
-    <meta property="og:url" content="https://quickconvert.example.com/image-pdf.html" />
-    <meta property="og:site_name" content="QuickConvert" />
-    <meta property="og:image" content="https://quickconvert.example.com/assets/img/icons/og-image.png" />
-    <meta property="og:image:alt" content="QuickConvert Image ↔ PDF converter interface" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="QuickConvert – JPG/PNG ↔ PDF Converter" />
+  <meta property="og:description" content="Free online JPG/PNG ↔ PDF converter. Turn JPG/PNG into PDF and export PDF pages as JPG/PNG directly in your browser." />
+  <meta property="og:url" content="https://quickconvert.example.com/JPG/PNG-pdf.html" />
+  <meta property="og:site_name" content="QuickConvert" />
+  <meta property="og:JPG/PNG" content="https://quickconvert.example.com/assets/img/icons/og-JPG/PNG.png" />
+  <meta property="og:JPG/PNG:alt" content="QuickConvert JPG/PNG ↔ PDF converter interface" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="QuickConvert – Image ↔ PDF Converter" />
-    <meta
-        name="twitter:description"
-        content="Convert images to PDF and PDF pages to images online with QuickConvert."
-    />
-    <meta name="twitter:image" content="https://quickconvert.example.com/assets/img/icons/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_JPG/PNG" />
+  <meta name="twitter:title" content="QuickConvert – JPG/PNG ↔ PDF Converter" />
+  <meta name="twitter:description" content="Convert JPG/PNG to PDF and PDF pages to JPG/PNG online with QuickConvert." />
+  <meta name="twitter:JPG/PNG" content="https://quickconvert.example.com/assets/img/icons/og-JPG/PNG.png" />
 
-    <!-- Bootstrap 5 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    />
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Bootstrap Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 
-    <!-- Custom styles -->
-    <link rel="stylesheet" href="assets/css/base.css" />
-    <link rel="stylesheet" href="assets/css/layout.css" />
-    <link rel="stylesheet" href="assets/css/components.css" />
-    <link rel="stylesheet" href="assets/css/converter-image.css" />
-    <link rel="stylesheet" href="assets/css/converter-pdf.css" />
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/converter-image.css" />
+  <link rel="stylesheet" href="assets/css/converter-pdf.css" />
 </head>
+
 <body class="theme-dark">
-    <!-- Top navigation (как на index/heic) -->
-    <nav class="navbar navbar-expand-lg navbar-blur fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-semibold" href="index.html">
-                <i class="bi bi-magic me-2"></i>QuickConvert
-            </a>
+  <!-- Top navigation (same as index/heic) -->
+  <nav class="navbar navbar-expand-lg navbar-blur fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="index.html">
+        <i class="bi bi-magic me-2"></i>QuickConvert
+      </a>
 
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mainNavbar"
-                aria-controls="mainNavbar"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <!-- Link back to main page -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!-- Link back to main page -->
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#png-jpg">PNG ↔ JPG</a>
-                    </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#png-jpg">PNG ↔ JPG</a>
+          </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="webp-converter.html">WebP ↔ JPG/PNG/GIF</a>
-                    </li>
+          <li class="nav-item">
+            <a class="nav-link" href="webp-converter.html">WebP ↔ JPG/PNG</a>
+          </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="heic-converter.html">HEIC ↔ JPG/PNG</a>
-                    </li>
+          <li class="nav-item">
+            <a class="nav-link" href="heic-converter.html">HEIC ↔ JPG/PNG</a>
+          </li>
 
-                    <!-- Current page: JPG/PNG → PDF -->
-                    <li class="nav-item">
-                        <a class="nav-link active" href="image-pdf.html">JPG/PNG → PDF</a>
-                    </li>
-                </ul>
+          <!-- Current page: JPG/PNG ↔ PDF -->
+          <li class="nav-item">
+            <a class="nav-link active" href="JPG/PNG-pdf.html">JPG/PNG ↔ PDF</a>
+          </li>
+        </ul>
 
-                <div class="d-flex align-items-center gap-2">
-                    <!-- Chips on larger screens -->
-                    <div class="d-none d-md-flex gap-2 me-2">
-                        <span class="chip">
+        <div class="d-flex align-items-center gap-2">
+          <!-- Chips on larger screens -->
+          <div class="d-none d-md-flex gap-2 me-2">
+            <span class="chip">
                             <i class="bi bi-lightning-charge me-1"></i> Fast
                         </span>
-                        <span class="chip">
+            <span class="chip">
                             <i class="bi bi-cloud-arrow-up me-1"></i> Online
                         </span>
-                    </div>
+          </div>
 
-                    <!-- Theme toggle -->
-                    <button
-                        id="theme-toggle"
-                        type="button"
-                        class="btn btn-sm btn-outline-secondary d-flex align-items-center"
-                    >
-                        <i class="bi bi-moon-stars me-2" id="theme-toggle-icon"></i>
-                        <span id="theme-toggle-text">Dark</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main content: как у index/heic — одна карточка по центру -->
-    <main class="hero">
-        <div class="container">
-            <section id="image-pdf-converter" class="tool-section">
-                <div class="row justify-content-center">
-                    <div class="col-lg-9 col-xl-9">
-                        <div class="card card-glass border-0">
-                            <div
-                                class="card-header card-glass-header d-flex justify-content-between align-items-center"
-                            >
-                                <div class="d-flex flex-column">
-                                    <span class="badge-soft mb-1 d-inline-flex align-items-center gap-2">
-                                        <i class="bi bi-stars"></i> JPG/PNG ↔ PDF converter
-                                    </span>
-                                    <span class="small text-secondary">
-                                        Combine images into a PDF or export PDF pages as images.
-                                    </span>
-                                </div>
-                                <span class="small text-secondary text-end">
-                                    <i class="bi bi-clock-history me-1"></i>
-                                    <span id="last-conv-label">No conversions yet</span>
-                                </span>
-                            </div>
-
-                            <div class="card-body">
-                                <form id="converter-form">
-                                    <!-- File upload -->
-                                    <div class="mb-3">
-                                        <label class="form-label small text-uppercase text-secondary">
-                                            Choose image(s) or a PDF
-                                        </label>
-
-                                        <div class="upload-area" id="upload-area">
-                                            <!-- Hidden native file input -->
-                                            <input
-                                                type="file"
-                                                id="file-input"
-                                                class="d-none"
-                                                accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.pdf"
-                                                multiple
-                                            />
-
-                                            <i class="bi bi-cloud-arrow-up"></i>
-                                            <div class="fw-semibold mb-1 text-white">
-                                                Drag &amp; drop files here or
-                                                <span class="text-info">browse from disk</span>
-                                            </div>
-                                            <small>
-                                                Images: JPG, JPEG, PNG, WebP, GIF, BMP<br />
-                                                Also: single PDF file (for PDF → images)<br />
-                                                Max size per file (demo): 20 MB
-                                            </small>
-                                        </div>
-
-                                        <!-- Selected file info (summary) -->
-                                        <div class="mt-2 d-none" id="file-info-wrapper">
-                                            <div class="file-info">
-                                                <div class="d-flex justify-content-between">
-                                                    <div class="d-flex align-items-center">
-                                                        <i class="bi bi-folder2-open me-2"></i>
-                                                        <div>
-                                                            <div id="file-summary" class="fw-semibold small"></div>
-                                                            <div
-                                                                id="file-size"
-                                                                class="text-secondary small"
-                                                            ></div>
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-sm btn-outline-secondary"
-                                                        id="change-file-btn"
-                                                    >
-                                                        <i class="bi bi-arrow-repeat me-1"></i>Change
-                                                    </button>
-                                                </div>
-                                                <div
-                                                    id="file-list"
-                                                    class="small text-secondary mt-2"
-                                                ></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Direction & target format -->
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label
-                                                class="form-label small text-uppercase text-secondary"
-                                            >
-                                                What do you want to do?
-                                            </label>
-                                            <select
-                                                class="form-select form-select-sm bg-dark text-light border-secondary"
-                                                id="conversion-mode"
-                                            >
-                                                <option value="images-to-pdf" selected>
-                                                    Images → single PDF
-                                                </option>
-                                                <option value="pdf-to-images">
-                                                    PDF → images (JPG/PNG)
-                                                </option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label
-                                                class="form-label small text-uppercase text-secondary"
-                                            >
-                                                Target format
-                                            </label>
-                                            <select
-                                                class="form-select form-select-sm bg-dark text-light border-secondary"
-                                                id="to-format"
-                                            >
-                                                <option value="pdf" selected>PDF document</option>
-                                                <option value="jpg">JPG images</option>
-                                                <option value="png">PNG images</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- Layout & quality -->
-                                    <div class="mt-3">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center"
-                                        >
-                                            <span
-                                                class="small text-secondary text-uppercase"
-                                            >
-                                                Layout &amp; quality
-                                            </span>
-                                            <span class="small text-secondary">
-                                                <i class="bi bi-gear-wide-connected me-1"></i>
-                                                Fine-tuning
-                                            </span>
-                                        </div>
-
-                                        <div class="row g-3 mt-1">
-                                            <div class="col-md-6">
-                                                <label class="small text-secondary">
-                                                    Page size (for PDF)
-                                                </label>
-                                                <select
-                                                    class="form-select form-select-sm bg-dark text-light border-secondary"
-                                                    id="page-size"
-                                                >
-                                                    <option value="a4" selected>A4</option>
-                                                    <option value="letter">US Letter</option>
-                                                    <option value="fit-image">Fit image size</option>
-                                                </select>
-                                                <p class="small text-secondary mb-0 mt-1">
-                                                    “Fit image size” uses the image dimensions as page size.
-                                                </p>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label class="small text-secondary">
-                                                    Output quality (for JPG/WebP)
-                                                </label>
-                                                <input
-                                                    type="range"
-                                                    class="form-range"
-                                                    min="40"
-                                                    max="100"
-                                                    value="90"
-                                                    id="quality-range"
-                                                />
-                                                <div
-                                                    class="d-flex justify-content-between small text-secondary"
-                                                >
-                                                    <span>Smaller file</span>
-                                                    <span>Higher quality</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Buttons & status -->
-                                    <div
-                                        class="mt-4 d-flex flex-column flex-md-row align-items-md-center gap-3"
-                                    >
-                                        <button
-                                            type="submit"
-                                            class="btn btn-primary d-flex align-items-center justify-content-center gap-2"
-                                            id="convert-btn"
-                                        >
-                                            <span
-                                                class="spinner-border spinner-border-sm d-none"
-                                                role="status"
-                                                aria-hidden="true"
-                                                id="convert-spinner"
-                                            ></span>
-                                            <i class="bi bi-magic"></i>
-                                            <span>Convert</span>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-secondary btn-sm d-flex align-items-center"
-                                            id="reset-btn"
-                                        >
-                                            <i class="bi bi-x-circle me-1"></i>
-                                            Reset
-                                        </button>
-
-                                        <div class="ms-md-auto w-100 w-md-50">
-                                            <div
-                                                class="conversion-status text-secondary"
-                                                id="status-text"
-                                            >
-                                                No files selected yet.
-                                            </div>
-
-                                            <div
-                                                class="progress mt-1 d-none"
-                                                id="progress-bar-wrapper"
-                                            >
-                                                <div
-                                                    class="progress-bar progress-bar-striped progress-bar-animated"
-                                                    role="progressbar"
-                                                    style="width: 100%"
-                                                    id="progress-bar"
-                                                    aria-valuenow="100"
-                                                    aria-valuemin="0"
-                                                    aria-valuemax="100"
-                                                ></div>
-                                            </div>
-
-                                            <a
-                                                href="#"
-                                                class="small mt-2 d-inline-flex align-items-center text-decoration-none d-none"
-                                                id="download-link"
-                                                download
-                                            >
-                                                <i class="bi bi-download me-1"></i>
-                                                Download result
-                                            </a>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Короткий tip вместо "can be implemented with jsPDF..." и прочего -->
-                        <div class="mt-3 text-secondary small">
-                            Tip: For multi-page PDF, add images in the order you want them to appear.
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Other converters, как на index/heic -->
-            <section class="tool-section mt-5">
-                <h2 class="h5 mb-3 text-white">Other converters</h2>
-                <div class="row g-3">
-                    <!-- PNG ↔ JPG -->
-                    <div class="col-md-4">
-                        <a href="index.html#png-jpg" class="text-decoration-none">
-                            <div class="card card-glass h-100">
-                                <div class="card-body">
-                                    <h3 class="h6 mb-1 text-white">
-                                        <i class="bi bi-image me-1"></i>
-                                        PNG ↔ JPG
-                                    </h3>
-                                    <p class="small text-secondary mb-0">
-                                        Convert PNG to JPG and JPG to PNG directly in your browser.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- WebP converter -->
-                    <div class="col-md-4">
-                        <a href="webp-converter.html" class="text-decoration-none">
-                            <div class="card card-glass h-100">
-                                <div class="card-body">
-                                    <h3 class="h6 mb-1 text-white">
-                                        <i class="bi bi-image me-1"></i>
-                                        WebP ↔ JPG/PNG/GIF
-                                    </h3>
-                                    <p class="small text-secondary mb-0">
-                                        Convert modern WebP images to classic formats (JPG, PNG, GIF) and back.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- HEIC converter -->
-                    <div class="col-md-4">
-                        <a href="heic-converter.html" class="text-decoration-none">
-                            <div class="card card-glass h-100">
-                                <div class="card-body">
-                                    <h3 class="h6 mb-1 text-white">
-                                        <i class="bi bi-phone me-1"></i>
-                                        HEIC ↔ JPG/PNG
-                                    </h3>
-                                    <p class="small text-secondary mb-0">
-                                        Convert iPhone HEIC photos to more universal JPG or PNG for easy sharing.
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer как на index: пустой контейнер -->
-    <footer class="footer text-center">
-        <div class="container">
-        </div>
-    </footer>
-
-    <!-- Cookie Consent Banner (как на index/heic) -->
-    <div id="cookie-banner" class="cookie-banner">
-      <div class="cookie-content">
-        <p>
-          We use cookies to analyze our traffic and, in the future, to personalize content and
-          ads. By using this site, you agree to this.
-        </p>
-        <div class="cookie-actions">
-          <button id="cookie-accept" class="btn btn-sm btn-primary">Accept</button>
-          <button id="cookie-decline" class="btn btn-sm btn-outline-secondary">Decline</button>
+          <!-- Theme toggle -->
+          <button id="theme-toggle" type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center">
+            <i class="bi bi-moon-stars me-2" id="theme-toggle-icon"></i>
+            <span id="theme-toggle-text">Dark</span>
+          </button>
         </div>
       </div>
     </div>
+  </nav>
 
-    <!-- Bootstrap JS (bundle with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Main content -->
+  <main class="hero">
+    <div class="container">
+      <section id="JPG/PNG-pdf-converter" class="tool-section">
+        <div class="row justify-content-center">
+          <div class="col-lg-9 col-xl-9">
+            <div class="card card-glass border-0">
+              <div class="card-header card-glass-header d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                  <span class="badge-soft mb-1 d-inline-flex align-items-center gap-2">
+                                        <i class="bi bi-stars"></i> JPG/PNG ↔ PDF converter
+                                    </span>
+                  <span class="small text-secondary">
+                                        Combine JPG/PNG into a PDF or export PDF pages as JPG/PNG.
+                                    </span>
+                </div>
+                <span class="small text-secondary text-end">
+                                    <i class="bi bi-clock-history me-1"></i>
+                                    <span id="last-conv-label">No conversions yet</span>
+                </span>
+              </div>
 
-    <!-- Cookie consent -->
-    <script src="assets/js/cookie-consent.js"></script>
+              <div class="card-body">
+                <form id="converter-form">
+                  <!-- File upload -->
+                  <div class="mb-3">
+                    <label class="form-label small text-uppercase text-secondary">
+                      Choose JPG/PNG(s) or a PDF
+                    </label>
 
-    <!-- App-level scripts -->
-    <script type="module" src="assets/js/app-theme.js"></script>
-    <script type="module" src="assets/js/app-nav.js"></script>
-    <script type="module" src="assets/js/app-common-ui.js"></script>
+                    <div class="upload-area" id="upload-area">
+                      <!-- Hidden native file input -->
+                      <input type="file" id="file-input" class="d-none" accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.pdf" multiple />
 
-    <!-- Converter logic for this page -->
-    <script src="assets/js/vendor/jspdf.umd.min.js"></script>
-    <script type="module" src="assets/js/converters/converter-image-pdf.js"></script>
+                      <i class="bi bi-cloud-arrow-up"></i>
+                      <div class="fw-semibold mb-1 text-white">
+                        Drag &amp; drop files here or
+                        <span class="text-info">browse from disk</span>
+                      </div>
+                      <small>
+                          Max size per file (demo): 20 MB
+                      </small>
+                    </div>
+
+                    <!-- Selected file info (summary) -->
+                    <div class="mt-2 d-none" id="file-info-wrapper">
+                      <div class="file-info">
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-folder2-open me-2"></i>
+                            <div>
+                              <div id="file-summary" class="fw-semibold small"></div>
+                              <div id="file-size" class="text-secondary small"></div>
+                            </div>
+                          </div>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" id="change-file-btn">
+                            <i class="bi bi-arrow-repeat me-1"></i>Change
+                          </button>
+                        </div>
+                        <div id="file-list" class="small text-secondary mt-2"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Direction & target format + Swap -->
+                  <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                      <label class="form-label small text-uppercase text-secondary" for="conversion-mode">
+                        What do you want to do?
+                      </label>
+                      <select class="form-select form-select-sm bg-dark text-light border-secondary" id="conversion-mode">
+                        <option value="Detect_automatically" selected>
+                          Detect automatically
+                        </option>
+                        <option value="PDF-to-JPG/PNG">
+                          PDF
+                        </option>
+                        <option value="JPG/JPEG_to-PDF">
+                          JPG/JPEG
+                        </option>
+                        <option value="PNG-to-PDF">
+                          PNG
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-2 d-flex justify-content-center">
+                      <button type="button" class="btn btn-outline-info btn-sm px-3 swap-btn d-flex align-items-center justify-content-center mt-3 mt-md-0" id="swap-mode">
+                        <i class="bi bi-arrow-left-right me-1"></i>
+                        <span class="d-none d-md-inline">Swap</span>
+                      </button>
+                    </div>
+
+                    <div class="col-md-5">
+                      <label class="form-label small text-uppercase text-secondary" for="to-format">
+                        Target format
+                      </label>
+                      <select class="form-select form-select-sm bg-dark text-light border-secondary" id="to-format">
+                        <option value="pdf" selected>PDF document</option>
+                        <option value="jpg">JPG</option>
+                        <option value="png">PNG</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Layout & quality -->
+                  <div class="mt-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="small text-secondary text-uppercase">
+                                                Layout &amp; quality
+                                            </span>
+                      <span class="small text-secondary">
+                                                <i class="bi bi-gear-wide-connected me-1"></i>
+                                                Fine-tuning
+                                            </span>
+                    </div>
+
+                    <div class="row g-3 mt-1">
+                      <div class="col-md-6">
+                        <label class="small text-secondary" for="page-size">
+                          Page size (for PDF)
+                        </label>
+                        <select class="form-select form-select-sm bg-dark text-light border-secondary" id="page-size">
+                          <option value="a4" selected>A4</option>
+                          <option value="letter">US Letter</option>
+                          <option value="fit-JPG/PNG">Fit JPG/PNG size</option>
+                        </select>
+                        <p class="small text-secondary mb-0 mt-1">
+                          “Fit JPG/PNG size” uses the JPG/PNG dimensions as page size.
+                        </p>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="small text-secondary" for="quality-range">
+                          Output quality (for JPG/WebP)
+                        </label>
+                        <input type="range" class="form-range" min="40" max="100" value="90" id="quality-range" />
+                        <div class="d-flex justify-content-between small text-secondary">
+                          <span>Smaller file</span>
+                          <span>Higher quality</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Buttons & status -->
+                  <div class="mt-4 d-flex flex-column flex-md-row align-items-md-center gap-3">
+                    <button type="submit" class="btn btn-primary btn-lg d-flex align-items-center gap-2" id="convert-btn">
+                      <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="convert-spinner"></span>
+                      <i class="bi bi-magic"></i>
+                      <span>Convert</span>
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center" id="reset-btn">
+                      <i class="bi bi-x-circle me-1"></i> Reset
+                    </button>
+
+                    <div class="ms-md-auto w-100 w-md-50">
+                      <div class="conversion-status text-secondary" id="status-text">
+                        No files selected yet.
+                      </div>
+
+                      <div class="progress mt-1 d-none" id="progress-bar-wrapper">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" id="progress-bar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+
+                      <a href="#" class="small mt-2 d-inline-flex align-items-center text-decoration-none d-none" id="download-link" download>
+                        <i class="bi bi-download me-1"></i> Download result
+                      </a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="mt-3 text-secondary small">
+              Tip: For multi-page PDF, add JPG/PNG in the order you want them to appear.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Other converters -->
+      <section class="tool-section mt-5">
+        <h2 class="h5 mb-3 text-white">Other converters</h2>
+        <div class="row g-3">
+          <!-- PNG ↔ JPG -->
+          <div class="col-md-4">
+            <a href="index.html#png-jpg" class="text-decoration-none">
+              <div class="card card-glass h-100">
+                <div class="card-body">
+                  <h3 class="h6 mb-1 text-white">
+                                        <i class="bi bi-JPG/PNG me-1"></i>
+                                        PNG ↔ JPG
+                                    </h3>
+                  <p class="small text-secondary mb-0">
+                    Convert PNG to JPG and JPG to PNG directly in your browser.
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- WebP converter -->
+          <div class="col-md-4">
+            <a href="webp-converter.html" class="text-decoration-none">
+              <div class="card card-glass h-100">
+                <div class="card-body">
+                  <h3 class="h6 mb-1 text-white">
+                                        <i class="bi bi-JPG/PNG me-1"></i>
+                                        WebP ↔ JPG/PNG
+                                    </h3>
+                  <p class="small text-secondary mb-0">
+                    Convert modern WebP JPG/PNG to classic formats (JPG, PNG) and back.
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- HEIC converter -->
+          <div class="col-md-4">
+            <a href="heic-converter.html" class="text-decoration-none">
+              <div class="card card-glass h-100">
+                <div class="card-body">
+                  <h3 class="h6 mb-1 text-white">
+                                        <i class="bi bi-phone me-1"></i>
+                                        HEIC ↔ JPG/PNG
+                                    </h3>
+                  <p class="small text-secondary mb-0">
+                    Convert iPhone HEIC photos to more universal JPG or PNG for easy sharing.
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer text-center">
+    <div class="container">
+    </div>
+  </footer>
+
+  <!-- Cookie Consent Banner -->
+  <div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-content">
+      <p>
+        We use cookies to analyze our traffic and, in the future, to personalize content and ads. By using this site, you agree to this.
+      </p>
+      <div class="cookie-actions">
+        <button id="accept-cookies" class="btn btn-sm btn-primary">Accept</button>
+        <button id="decline-cookies" class="btn btn-sm btn-outline-secondary">Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (bundle with Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Cookie consent -->
+  <script src="assets/js/cookie-consent.js"></script>
+
+  <!-- App-level scripts -->
+  <script type="module" src="assets/js/app-theme.js"></script>
+  <script type="module" src="assets/js/app-nav.js"></script>
+  <script type="module" src="assets/js/app-common-ui.js"></script>
+
+  <!-- Converter logic for this page -->
+  <script src="assets/js/vendor/jspdf.umd.min.js"></script>
+
+  <!-- PDF.js library (for PDF → image conversion) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    // Настройка пути к воркеру pdf.js (обязательно!)
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  </script>
+
+
+  <script type="module" src="assets/js/converters/converter-image-pdf.js"></script>
 </body>
+
 </html>
