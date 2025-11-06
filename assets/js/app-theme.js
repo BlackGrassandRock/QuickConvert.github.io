@@ -11,12 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Load initial theme from localStorage or system preference ---
     const savedTheme = localStorage.getItem("qc-theme");
-    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    if (savedTheme === "light" || (!savedTheme && prefersLight)) {
-        setTheme("light", false);
-    } else {
+    // Default is dark; use light only if user explicitly selected it or system prefers it
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
         setTheme("dark", false);
+    } else {
+        setTheme("light", false);
     }
 
     // --- Event listener for toggle button ---
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Function to apply theme ---
+    // --- Apply theme ---
     function setTheme(theme, persist = true) {
         if (theme === "light") {
             body.classList.add("theme-light");
@@ -44,11 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- (Optional) react to OS theme change dynamically ---
-    window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
-        const currentPref = e.matches ? "light" : "dark";
+    // --- React to OS theme change (optional) ---
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        const currentPref = e.matches ? "dark" : "light";
         const saved = localStorage.getItem("qc-theme");
-        // Change theme only if user hasn't manually selected one
         if (!saved) {
             setTheme(currentPref, false);
         }
