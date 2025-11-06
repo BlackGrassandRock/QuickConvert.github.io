@@ -1,0 +1,6 @@
+# robots.txt for https://quik-convert.com/
+
+User-agent: *
+Allow: /
+
+Sitemap: https://quik-convert.com/sitemap.xml

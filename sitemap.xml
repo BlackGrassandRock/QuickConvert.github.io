@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home page -->
+  <url>
+    <loc>https://quik-convert.com/</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- PNG ↔ JPG main tool (index anchored section is on the same page) -->
+  <url>
+    <loc>https://quik-convert.com/index.html</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- WebP converter -->
+  <url>
+    <loc>https://quik-convert.com/webp-converter.html</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- HEIC converter -->
+  <url>
+    <loc>https://quik-convert.com/heic-converter.html</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- JPG/PNG ↔ PDF converter -->
+  <url>
+    <loc>https://quik-convert.com/image-pdf.html</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Privacy & Cookie Policy -->
+  <url>
+    <loc>https://quik-convert.com/privacy.html</loc>
+    <lastmod>2025-11-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>
