@@ -391,20 +391,7 @@
   <script type="module" src="assets/js/app-nav.js"></script>
   <script type="module" src="assets/js/app-common-ui.js"></script>
 
-  <!-- Converter logic for this page -->
-  <script src="assets/js/vendor/jspdf.umd.min.js" defer></script>
-
-  <!-- PDF.js library (for PDF → image conversion) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
-  <script>
-    // pdfjsLib will be available after deferred script execution
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.pdfjsLib) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-      }
-    });
-  </script>
-
+  <!-- Converter logic for this page (lazy-loads heavy libs) -->
   <script type="module" src="assets/js/converters/converter-image-pdf.js"></script>
 </body>
 
