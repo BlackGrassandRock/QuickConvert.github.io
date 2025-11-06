@@ -4,51 +4,65 @@
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-    const banner = document.getElementById("cookie-banner");
-    if (!banner) return;
+  const banner = document.getElementById("cookie-banner");
+  if (!banner) return;
 
-    const acceptBtn = document.getElementById("accept-cookies");
-    const declineBtn = document.getElementById("decline-cookies");
+  const acceptBtn = document.getElementById("accept-cookies");
+  const declineBtn = document.getElementById("decline-cookies");
 
-    // Safe localStorage access
-    let consent = null;
-    try {
-        consent = localStorage.getItem("cookieConsent");
-    } catch {
-        consent = null;
+  // Safe localStorage access
+  let consent = null;
+  try {
+    consent = localStorage.getItem("cookieConsent");
+  } catch {
+    consent = null;
+  }
+
+  function showBanner() {
+    banner.style.display = "block";
+  }
+
+  function hideBanner() {
+    banner.style.display = "none";
+  }
+
+  function enableAnalytics() {
+    if (typeof window.qcLoadAnalytics === "function") {
+      window.qcLoadAnalytics();
     }
+  }
 
-    // Show banner only if no prior choice
-    if (!consent) {
-        banner.style.display = "block";
-    }
+  // Initial state based on stored consent
+  if (consent === "accepted") {
+    hideBanner();
+    enableAnalytics();
+  } else if (consent === "declined") {
+    hideBanner();
+  } else {
+    showBanner();
+  }
 
-    const hideBanner = () => {
-        banner.style.display = "none";
-    };
+  if (acceptBtn) {
+    acceptBtn.addEventListener("click", () => {
+      try {
+        localStorage.setItem("cookieConsent", "accepted");
+      } catch {
+        // ignore storage errors
+      }
+      hideBanner();
+      enableAnalytics();
+    });
+  }
 
-    if (acceptBtn) {
-        acceptBtn.addEventListener("click", () => {
-            try {
-                localStorage.setItem("cookieConsent", "accepted");
-            } catch {
-                // ignore storage errors (private mode)
-            }
-            hideBanner();
-            // Hook for analytics initialization if needed
-            // initAnalytics();
-        });
-    }
-
-    if (declineBtn) {
-        declineBtn.addEventListener("click", () => {
-            try {
-                localStorage.setItem("cookieConsent", "declined");
-            } catch {
-                // ignore storage errors
-            }
-            hideBanner();
-            // Ensure no analytics are loaded here
-        });
-    }
+  if (declineBtn) {
+    declineBtn.addEventListener("click", () => {
+      try {
+        localStorage.setItem("cookieConsent", "declined");
+      } catch {
+        // ignore storage errors
+      }
+      hideBanner();
+      // No analytics on decline
+    });
+  }
 });
