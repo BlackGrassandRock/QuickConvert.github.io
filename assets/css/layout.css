@@ -237,7 +237,7 @@ main .container {
 
 @media (max-width: 575.98px) {
     .hero {
-        padding-top: 4rem;
+        padding-top: 0rem;
         padding-bottom: 2.5rem;
     }
 
