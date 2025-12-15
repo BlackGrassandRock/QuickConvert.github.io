@@ -2,8 +2,8 @@
   "name": "QuickConvert",
   "short_name": "QuickConvert",
   "description": "Free online image converter – convert PNG, JPG, WebP, HEIC and PDF directly in your browser.",
-  "start_url": "https://quik-convert.com/",
-  "scope": "https://quik-convert.com/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#0f172a",
@@ -12,20 +12,15 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "https://quik-convert.com/assets/img/icons/favicon-16x16.ico",
-      "sizes": "16x16",
+      "src": "/favicon.ico",
+      "sizes": "48x48",
       "type": "image/x-icon"
     },
     {
-      "src": "https://quik-convert.com/assets/img/icons/favicon-32x32.ico",
-      "sizes": "32x32",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "https://quik-convert.com/assets/img/icons/apple-touch-icon.png",
+      "src": "/assets/img/icons/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     }
   ]
 }
