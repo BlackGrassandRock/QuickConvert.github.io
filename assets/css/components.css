@@ -286,3 +286,117 @@ body.theme-light .swap-btn:hover {
   color: #fff !important;
   box-shadow: 0 0 6px rgba(0, 187, 255, 0.6);
 }
+
+
+/* ===== FOOTER ===== */
+
+.footer-clean {
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 0.95rem;
+}
+
+.footer-grid {
+  align-items: start;
+}
+
+.footer-title {
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  margin: 0;
+}
+
+/* list reset + neat spacing */
+.footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-list li {
+  margin: 0.35rem 0;
+  line-height: 1.5;
+}
+
+/* links look clean */
+.footer-list a {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.footer-list a:hover {
+  text-decoration: underline;
+}
+
+.footer-meta {
+  font-size: 0.92rem;
+  opacity: 0.95;
+}
+
+/* divider & bottom */
+.footer-divider {
+  border-color: rgba(15, 23, 42, 0.10);
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.92rem;
+}
+
+/* LIGHT */
+body.theme-light .footer-clean {
+  background: #ffffff;
+  box-shadow: 0 -10px 24px rgba(15, 23, 42, 0.06);
+}
+
+body.theme-light .footer-title {
+  color: #0f172a;
+}
+
+body.theme-light .footer-text,
+body.theme-light .footer-meta,
+body.theme-light .footer-bottom {
+  color: rgba(15, 23, 42, 0.72);
+}
+
+body.theme-light .footer-list a,
+body.theme-light .footer-clean a {
+  color: rgba(15, 23, 42, 0.82);
+}
+
+body.theme-light .footer-list a:hover,
+body.theme-light .footer-clean a:hover {
+  color: #0f172a;
+}
+
+/* DARK (если у тебя theme-dark может висеть вместе с theme-light stated) */
+body.theme-dark:not(.theme-light) .footer-clean {
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+body.theme-dark:not(.theme-light) .footer-title {
+  color: #f8fafc;
+}
+
+body.theme-dark:not(.theme-light) .footer-text,
+body.theme-dark:not(.theme-light) .footer-meta,
+body.theme-dark:not(.theme-light) .footer-bottom {
+  color: #94a3b8;
+}
+
+body.theme-dark:not(.theme-light) .footer-list a,
+body.theme-dark:not(.theme-light) .footer-clean a {
+  color: #9ca3af;
+}
+
+body.theme-dark:not(.theme-light) .footer-list a:hover,
+body.theme-dark:not(.theme-light) .footer-clean a:hover {
+  color: #e5e7eb;
+}
+
+body.theme-dark:not(.theme-light) .footer-divider {
+  border-color: rgba(255, 255, 255, 0.12);
+}

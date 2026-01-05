@@ -236,3 +236,8 @@ if (typeof window !== "undefined") {
     window.QCUI.setButtonLoading = setButtonLoading;
     window.QCUI.showToast = showToast;
 }
+
+const yearEl = document.getElementById("footer-year");
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
