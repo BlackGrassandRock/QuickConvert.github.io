@@ -34,45 +34,93 @@
 </head>
 
 <body class="theme-dark">
-  <nav class="navbar navbar-expand-lg navbar-blur fixed-top">
-    <div class="container">
-      <a class="navbar-brand fw-semibold" href="index.html">
-        <i class="bi bi-magic me-2"></i>QuickConvert
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" href="#png-jpg">PNG ↔ JPG</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="webp-converter.html">WebP ↔ JPG/PNG</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="heic-converter.html">HEIC → JPG/PNG</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="image-pdf.html">JPG/PNG ↔ PDF</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="faq.html">FAQ</a>
-          </li>
-        </ul>
-        <div class="d-flex align-items-center gap-2">
-          <div class="d-none d-md-flex gap-2 me-2">
-            <span class="chip"><i class="bi bi-lightning-charge me-1"></i> Fast</span>
-            <span class="chip"><i class="bi bi-cloud-arrow-up me-1"></i> Online</span>
-          </div>
-          <button id="theme-toggle" type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center">
-            <i class="bi bi-moon-stars me-2" id="theme-toggle-icon"></i>
-            <span id="theme-toggle-text">Dark</span>
-          </button>
+<nav class="navbar navbar-expand-lg navbar-blur fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" href="index.html">
+      <i class="bi bi-magic me-2"></i>QuickConvert
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+
+        <!-- Tools dropdown (all converters go here) -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle"
+             href="#"
+             id="toolsDropdown"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false">
+            Tools
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-dark shadow" aria-labelledby="toolsDropdown">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="index.html#png-jpg">
+                <i class="bi bi-image"></i> PNG ↔ JPG
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="webp-converter.html">
+                <i class="bi bi-image"></i> WebP ↔ JPG/PNG
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="heic-converter.html">
+                <i class="bi bi-phone"></i> HEIC → JPG/PNG
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="image-pdf.html">
+                <i class="bi bi-file-earmark-pdf"></i> JPG/PNG ↔ PDF
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="svg-converter.html">
+                <i class="bi bi-vector-pen"></i> SVG → PNG/JPG/WebP
+              </a>
+            </li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="index.html">
+                <i class="bi bi-grid"></i> All tools
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="faq.html">FAQ</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+        <div class="d-none d-md-flex gap-2 me-2">
+          <span class="chip"><i class="bi bi-lightning-charge me-1"></i> Fast</span>
+          <span class="chip"><i class="bi bi-cloud-arrow-up me-1"></i> Online</span>
         </div>
+
+        <button id="theme-toggle" type="button"
+          class="btn btn-sm btn-outline-secondary d-flex align-items-center"
+          aria-label="Toggle color theme">
+          <i class="bi bi-moon-stars me-2" id="theme-toggle-icon"></i>
+          <span id="theme-toggle-text">Dark</span>
+        </button>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <main class="hero">
     <div class="container">

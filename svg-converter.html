@@ -3,32 +3,32 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>QuickConvert – HEIC → JPG/PNG Converter</title>
+  <title>QuickConvert – SVG → PNG/JPG/WebP Converter</title>
 
-  <meta name="description" content="Convert HEIC photos to JPG or PNG online. QuickConvert is a free browser-based HEIC converter." />
-  <meta name="keywords" content="heic to jpg, heic to png, jpg to heic, online heic converter, ios photo converter" />
+  <meta name="description" content="Convert SVG vector images to PNG, JPG or WebP online. QuickConvert is a free browser-based SVG converter." />
+  <meta name="keywords" content="svg to png, svg to jpg, svg to webp, svg converter, export svg, online svg converter" />
   <meta name="robots" content="index, follow" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="author" content="QuickConvert" />
   <meta name="theme-color" content="#0f172a" />
 
-  <link rel="canonical" href="https://quik-convert.com/heic-converter.html" />
+  <link rel="canonical" href="https://quik-convert.com/svg-converter.html" />
 
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="QuickConvert – HEIC → JPG/PNG Converter" />
-  <meta property="og:description" content="Free online HEIC converter. Convert HEIC photos from iOS devices to JPG or PNG directly in your browser." />
-  <meta property="og:url" content="https://quik-convert.com/heic-converter.html" />
+  <meta property="og:title" content="QuickConvert – SVG → PNG/JPG/WebP Converter" />
+  <meta property="og:description" content="Free online SVG converter. Convert SVG images to PNG, JPG or WebP directly in your browser." />
+  <meta property="og:url" content="https://quik-convert.com/svg-converter.html" />
   <meta property="og:site_name" content="QuickConvert" />
   <meta property="og:image" content="https://quik-convert.com/assets/img/icons/og-image.png" />
-  <meta property="og:image:alt" content="QuickConvert HEIC converter interface" />
+  <meta property="og:image:alt" content="QuickConvert SVG converter interface" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="QuickConvert – HEIC → JPG/PNG Converter" />
-  <meta name="twitter:description" content="Convert HEIC photos to JPG or PNG and improve compatibility with any device." />
+  <meta name="twitter:title" content="QuickConvert – SVG → PNG/JPG/WebP Converter" />
+  <meta name="twitter:description" content="Convert SVG vector images to PNG, JPG or WebP and improve compatibility with any device." />
   <meta name="twitter:image" content="https://quik-convert.com/assets/img/icons/og-image.png" />
 
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
@@ -48,6 +48,7 @@
 </head>
 
 <body class="theme-dark">
+
 <nav class="navbar navbar-expand-lg navbar-blur fixed-top">
   <div class="container">
     <a class="navbar-brand fw-semibold" href="index.html">
@@ -136,19 +137,20 @@
   </div>
 </nav>
 
+
   <main class="hero" role="main">
     <div class="container">
-      <section id="heic-converter" class="tool-section">
+      <section id="svg-converter" class="tool-section">
         <div class="row justify-content-center">
           <div class="col-lg-9 col-xl-9">
             <div class="card card-glass border-0">
               <div class="card-header card-glass-header d-flex justify-content-between align-items-center">
                 <div class="d-flex flex-column">
                   <span class="badge-soft mb-1 d-inline-flex align-items-center gap-2">
-                    <i class="bi bi-stars"></i> HEIC → JPG/PNG converter
+                    <i class="bi bi-stars"></i> SVG → PNG/JPG/WebP converter
                   </span>
                   <span class="small text-secondary">
-                    Convert HEIC photos to standard JPG or PNG files.
+                    Convert SVG vector graphics to common image formats.
                   </span>
                 </div>
                 <span class="small text-secondary text-end">
@@ -161,20 +163,19 @@
                 <form id="converter-form">
                   <div class="mb-3">
                     <label class="form-label small text-uppercase text-secondary" for="file-input">
-                      Choose a HEIC or image file
+                      Choose an SVG file
                     </label>
 
                     <div class="upload-area" id="upload-area">
-                      <input type="file" id="file-input" class="d-none" accept=".heic,.heif,.jpg,.jpeg,.png" />
+                      <input type="file" id="file-input" class="d-none" accept=".svg,image/svg+xml" />
 
                       <i class="bi bi-cloud-arrow-up"></i>
                       <div class="fw-semibold mb-1 text-white">
-                        Drag &amp; drop a photo here or
+                        Drag &amp; drop an SVG here or
                         <span class="text-info">browse from disk</span>
                       </div>
                       <small>
-                        Recommended: HEIC / HEIF from iOS<br />
-                        Also accepts JPG, JPEG, PNG<br />
+                        Supported: SVG<br />
                         Max size (demo): 20 MB
                       </small>
                     </div>
@@ -182,7 +183,7 @@
                     <div class="mt-2 d-none" id="file-info-wrapper">
                       <div class="file-info d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
-                          <i class="bi bi-file-earmark-image me-2"></i>
+                          <i class="bi bi-filetype-svg me-2"></i>
                           <div>
                             <div id="file-name" class="fw-semibold small"></div>
                             <div id="file-size" class="text-secondary small"></div>
@@ -192,6 +193,8 @@
                           <i class="bi bi-arrow-repeat me-1"></i>Change
                         </button>
                       </div>
+
+                      <div class="small text-secondary mt-2 d-none" id="svg-meta"></div>
                     </div>
                   </div>
 
@@ -200,8 +203,8 @@
                       <label class="form-label small text-uppercase text-secondary" for="from-format">
                         Source format
                       </label>
-                      <select class="form-select form-select-sm bg-dark text-light border-secondary" id="from-format">
-                        <option value="heic" selected>HEIC / HEIF</option>
+                      <select class="form-select form-select-sm bg-dark text-light border-secondary" id="from-format" disabled>
+                        <option value="svg" selected>SVG</option>
                       </select>
                     </div>
 
@@ -210,8 +213,9 @@
                         Convert to
                       </label>
                       <select class="form-select form-select-sm bg-dark text-light border-secondary" id="to-format">
-                        <option value="jpg" selected>JPG / JPEG</option>
-                        <option value="png">PNG</option>
+                        <option value="png" selected>PNG</option>
+                        <option value="jpg">JPG / JPEG</option>
+                        <option value="webp">WebP</option>
                       </select>
                     </div>
                   </div>
@@ -255,99 +259,71 @@
 
                     <div class="row g-3 mt-1">
                       <div class="col-md-6">
+                        <label class="small text-secondary" for="scale-range">
+                          Scale (resolution multiplier)
+                        </label>
+                        <input type="range" class="form-range" min="1" max="4" value="2" step="1" id="scale-range" />
+                        <div class="d-flex justify-content-between small text-secondary">
+                          <span>1×</span>
+                          <span id="scale-label">2×</span>
+                          <span>4×</span>
+                        </div>
+                        <p class="small text-secondary mb-0">
+                          Increases PNG/JPG/WebP pixel size (useful for retina exports).
+                        </p>
+                      </div>
+
+                      <div class="col-md-6">
                         <label class="small text-secondary" for="quality-range">
-                          JPG quality
+                          JPG/WebP quality
                         </label>
                         <input type="range" class="form-range" min="40" max="100" value="90" id="quality-range" />
                         <div class="d-flex justify-content-between small text-secondary">
                           <span>Smaller file</span>
                           <span>Higher quality</span>
                         </div>
+                        <p class="small text-secondary mb-0" id="quality-hint">
+                          Used only when exporting to JPG/WebP.
+                        </p>
                       </div>
 
                       <div class="col-md-6">
-                        <label class="small text-secondary d-flex justify-content-between" for="compress-switch">
-                          <span>Compress file</span>
+                        <label class="small text-secondary" for="bg-color">
+                          Background (for JPG / non-transparent PNG/WebP)
+                        </label>
+                        <input type="color" class="form-control form-control-color bg-dark border-secondary" id="bg-color" value="#ffffff" title="Choose background color" />
+                        <p class="small text-secondary mb-0">
+                          SVG transparency will be filled with this color in JPG output or when transparency is disabled.
+                        </p>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="small text-secondary d-flex justify-content-between" for="transparent-switch">
+                          <span>Keep transparency (PNG/WebP)</span>
                           <span class="form-check form-switch m-0">
-                            <input
-                              class="form-check-input"
-                              type="checkbox"
-                              role="switch"
-                              id="compress-switch"
-                              checked
-                            />
+                            <input class="form-check-input" type="checkbox" role="switch" id="transparent-switch" checked />
                           </span>
                         </label>
                         <p class="small text-secondary mb-0">
-                          Tries to reduce file size while keeping quality acceptable.
+                          If disabled, PNG/WebP export will also use the background color.
                         </p>
                       </div>
                     </div>
                   </div>
+
+                  <canvas id="render-canvas" class="d-none"></canvas>
                 </form>
               </div>
             </div>
 
             <div class="mt-3 text-secondary small">
-              Tip: For multiple HEIC photos, you can repeat the conversion or open several tabs.
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- SEO content: HEIC to JPG/PNG guide & explanation -->
-      <section class="tool-section mt-5" aria-labelledby="heic-guide-heading">
-        <div class="row justify-content-center">
-          <div class="col-lg-9 col-xl-9">
-            <div class="card card-glass border-0">
-              <div class="card-header card-glass-header">
-                <h2 id="heic-guide-heading" class="h5 mb-0 text-white">
-                  How to convert HEIC to JPG or PNG online
-                </h2>
-              </div>
-              <div class="card-body">
-                <p class="text-secondary">
-                  HEIC is the default photo format used by recent iPhones and iPads. It offers smaller file sizes and better quality than classic JPG, but many apps, websites and even some desktop tools still do not fully support HEIC files. QuickConvert is a free HEIC to JPG/PNG converter that runs directly in your browser and helps you turn HEIC photos into more compatible image formats.
-                </p>
-
-                <h3 class="h6 text-white mt-3">
-                  Step-by-step: convert HEIC to JPG or PNG with QuickConvert
-                </h3>
-                <ol class="text-secondary">
-                  <li>Click the <strong>“browse from disk”</strong> area or simply drag &amp; drop your HEIC file into the upload box.</li>
-                  <li>Make sure the source format is set to <strong>“HEIC / HEIF”</strong>.</li>
-                  <li>In the <strong>“Convert to”</strong> dropdown choose whether you want <strong>JPG / JPEG</strong> or <strong>PNG</strong>.</li>
-                  <li>Optionally, adjust the <strong>JPG quality slider</strong> or toggle compression to reduce the output file size.</li>
-                  <li>Press <strong>“Convert”</strong> and wait a moment while the HEIC converter processes your photo.</li>
-                  <li>Download the result using the <strong>“Download result”</strong> link when it appears.</li>
-                </ol>
-
-                <p class="text-secondary">
-                  The whole conversion happens in your browser using modern JavaScript and Canvas APIs. In this demo version, your HEIC photos are not permanently stored on a server – they are processed locally on your device.
-                </p>
-
-                <h3 class="h6 text-white mt-4">
-                  When should I use JPG and when should I use PNG?
-                </h3>
-                <p class="text-secondary">
-                  Both JPG and PNG are widely supported formats, but they are optimized for slightly different scenarios:
-                </p>
-                <ul class="text-secondary">
-                  <li>
-                    <strong>JPG / JPEG</strong> – best for everyday photos, screenshots, messages and sharing on social media. JPG uses lossy compression and usually produces much smaller files, which is ideal when you care more about size than about pixel-perfect quality.
-                  </li>
-                  <li>
-                    <strong>PNG</strong> – better when you need transparency (logos, icons, UI elements) or want to preserve fine details and text. PNG files are typically larger, but they use lossless compression and keep every pixel.
-                  </li>
-                </ul>
-                <p class="text-secondary mb-0">
-                  If you are converting iPhone HEIC photos to send them by email, upload to a website or import into an older app, <strong>JPG is usually the best choice</strong>. If you need clean graphics with transparency, choose <strong>PNG</strong> instead.
-                </p>
-              </div>
+              Tip: For best results, use SVGs with embedded assets (fonts/images). External resources may render differently.
             </div>
           </div>
         </div>
       </section>
 
+      <!-- Other converters (как у тебя) -->
       <section class="tool-section mt-5">
         <h2 class="h5 mb-3 text-white">Other converters</h2>
         <div class="row g-3">
@@ -403,52 +379,48 @@
     </div>
   </main>
 
-
+  <!-- Footer (как у тебя) -->
   <footer class="footer footer-clean">
-  <div class="container py-5">
-
-    <div class="row g-4 footer-grid">
-      <!-- Brand -->
-      <div class="col-12 col-md-5 col-lg-4">
-        <div class="footer-title">
-          <i class="bi bi-magic me-2"></i>QuickConvert
+    <div class="container py-5">
+      <div class="row g-4 footer-grid">
+        <div class="col-12 col-md-5 col-lg-4">
+          <div class="footer-title">
+            <i class="bi bi-magic me-2"></i>QuickConvert
+          </div>
+          <p class="footer-text mt-2 mb-0">
+            Free online image converter.<br>
+            Convert PNG, JPG, WebP, HEIC and PDF directly in your browser.
+          </p>
         </div>
-        <p class="footer-text mt-2 mb-0">
-          Free online image converter.<br>
-          Convert PNG, JPG, WebP, HEIC and PDF directly in your browser.
-        </p>
+
+        <div class="col-6 col-md-3 col-lg-4">
+          <div class="footer-title">Tools</div>
+          <ul class="footer-list mt-2">
+            <li><a href="/index.html#png-jpg">PNG ↔ JPG</a></li>
+            <li><a href="/webp-converter.html">WebP ↔ JPG/PNG</a></li>
+            <li><a href="/heic-converter.html">HEIC → JPG/PNG</a></li>
+            <li><a href="/image-pdf.html">JPG/PNG ↔ PDF</a></li>
+            <li><a href="/svg-converter.html">SVG → PNG/JPG/WebP</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-4">
+          <div class="footer-title">Legal</div>
+          <ul class="footer-list mt-2">
+            <li><a href="/privacy.html">Privacy & Cookie Policy</a></li>
+          </ul>
+        </div>
       </div>
 
-      <!-- Tools -->
-      <div class="col-6 col-md-3 col-lg-4">
-        <div class="footer-title">Tools</div>
-        <ul class="footer-list mt-2">
-          <li><a href="/index.html#png-jpg">PNG ↔ JPG</a></li>
-          <li><a href="/webp-converter.html">WebP ↔ JPG/PNG</a></li>
-          <li><a href="/heic-converter.html">HEIC → JPG/PNG</a></li>
-          <li><a href="/image-pdf.html">JPG/PNG ↔ PDF</a></li>
-        </ul>
-      </div>
+      <hr class="footer-divider my-4">
 
-      <!-- Legal -->
-      <div class="col-6 col-md-4 col-lg-4">
-        <div class="footer-title">Legal</div>
-        <ul class="footer-list mt-2">
-          <li><a href="/privacy.html">Privacy & Cookie Policy</a></li>
-        </ul>
+      <div class="footer-bottom">
+        © <span id="footer-year"></span> QuickConvert. All rights reserved.
       </div>
     </div>
+  </footer>
 
-    <hr class="footer-divider my-4">
-
-    <div class="footer-bottom">
-      © <span id="footer-year"></span> QuickConvert. All rights reserved.
-    </div>
-
-  </div>
-</footer>
-
-
+  <!-- Cookie Consent Banner -->
   <div id="cookie-banner" class="cookie-banner">
     <div class="cookie-content">
       <p>
@@ -470,7 +442,7 @@
   <script type="module" src="assets/js/app-nav.js"></script>
   <script type="module" src="assets/js/app-common-ui.js"></script>
 
-  <script type="module" src="assets/js/converters/converter-heic.js"></script>
+  <script type="module" src="assets/js/converters/converter-svg.js"></script>
 </body>
 
 </html>
