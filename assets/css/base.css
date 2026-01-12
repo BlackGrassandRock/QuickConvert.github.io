@@ -383,8 +383,16 @@ body.theme-light .bg-dark {
   font-weight: 650;
   letter-spacing: 0.2px;
   margin: 0;
+}
+
+body.theme-dark .footer-title-sm {
   color: #f8fafc;
 }
+
+body.theme-light .footer-title-sm {
+  color: #0f172a;
+}
+
 
 /* lists */
 .footer-list {
