@@ -433,37 +433,48 @@
   </main>
 
 
-  <footer class="footer footer-clean">
+<footer class="footer footer-clean">
   <div class="container py-5">
 
-    <div class="row g-4 footer-grid">
+    <div class="footer-top">
       <!-- Brand -->
-      <div class="col-12 col-md-5 col-lg-4">
-        <div class="footer-title">
-          <i class="bi bi-magic me-2"></i>QuickConvert
+      <div class="footer-col footer-col--brand">
+        <div class="footer-brand">
+          <i class="bi bi-magic"></i>
+          <span class="footer-title">QuickConvert</span>
         </div>
-        <p class="footer-text mt-2 mb-0">
-          Free online image converter.<br>
-          Convert PNG, JPG, WebP, HEIC and PDF directly in your browser.
+
+        <p class="footer-text">
+          Free online converters that run in your browser — fast, private and simple.
         </p>
       </div>
 
-      <!-- Tools -->
-      <div class="col-6 col-md-3 col-lg-4">
-        <div class="footer-title">Tools</div>
-        <ul class="footer-list mt-2">
+      <!-- Popular -->
+      <div class="footer-col">
+        <div class="footer-title-sm">Popular tools</div>
+        <ul class="footer-list">
           <li><a href="/index.html#png-jpg">PNG ↔ JPG</a></li>
-          <li><a href="/webp-converter.html">WebP ↔ JPG/PNG</a></li>
           <li><a href="/heic-converter.html">HEIC → JPG/PNG</a></li>
           <li><a href="/image-pdf.html">JPG/PNG ↔ PDF</a></li>
+          <li><a href="/index.html" class="footer-cta">All tools →</a></li>
         </ul>
       </div>
 
-      <!-- Legal -->
-      <div class="col-6 col-md-4 col-lg-4">
-        <div class="footer-title">Legal</div>
-        <ul class="footer-list mt-2">
+      <!-- Legal + Contact -->
+      <div class="footer-col">
+        <div class="footer-title-sm">Legal</div>
+        <ul class="footer-list">
           <li><a href="/privacy.html">Privacy & Cookie Policy</a></li>
+        </ul>
+
+        <div class="footer-title-sm footer-mt">Contact</div>
+        <ul class="footer-list">
+          <li>
+            <a href="mailto:alfilipovich9@gmail.com" class="footer-mail">
+              <i class="bi bi-envelope"></i>
+              <span>alfilipovich9@gmail.com</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -471,12 +482,16 @@
     <hr class="footer-divider my-4">
 
     <div class="footer-bottom">
-      © <span id="footer-year"></span> QuickConvert. All rights reserved.
+      <div>© <span id="footer-year"></span> QuickConvert. All rights reserved.</div>
+
+      <div class="footer-mini-links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/faq.html">FAQ</a>
+      </div>
     </div>
 
   </div>
 </footer>
-
 
   <div id="cookie-banner" class="cookie-banner">
     <div class="cookie-content">
